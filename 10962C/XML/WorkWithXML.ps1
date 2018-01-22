@@ -8,12 +8,6 @@ $parent = $Books.SelectSingleNode('//catalog')
 $child = $books.CreateElement('element','book','')
 $parent.AppendChild($child)
 
-$parent = $Books.SelectSingleNode('//catalog/book')
-$child = $books.CreateElement('element','Cover','')
-$parent.AppendChild($child)
-
-$Books.catalog.book[0].Cover = "Hard"
-
 $parent = $Books.SelectSingleNode('/catalog/book[last()]')  
 $id = $books.CreateElement('element','id','')
 $author = $books.CreateElement('element','author','')
