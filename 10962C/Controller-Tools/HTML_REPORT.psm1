@@ -60,7 +60,10 @@ function Merge-HtmlFragments {
 }
 
 function Save-Html {
-  Param ($HtmlDoc)
-  $HtmlDoc | Out-File $home\Documents\report.html
+  Param (
+  $HtmlDoc,
+  $Path = "$home\Documents\report.html"
+  )
+  $HtmlDoc | Out-File $Path
 }
 
