@@ -13,7 +13,7 @@
 .EXAMPLE
    Touch-File -FileName test01.tmp
 
-   This eample only creates or updates this one file
+   This example only creates or updates this one file
 .NOTES
    General notes
    Created by : Brent Denny
