@@ -24,15 +24,15 @@
     [Parameter(Mandatory=$true)]
     [string[]]$Filename
   )
-  foreach ($file in $Filename ) {
-    if (Test-Path $file) {
-      try {(Get-ChildItem $file).LastWriteTime = Get-Date -ErrorAction Stop} 
-      Catch {Write-Warning "Problem updating file $file"}   
+  foreach ($File in $Filename ) {
+    if (Test-Path $File) {
+      try {(Get-ChildItem $File).LastWriteTime = Get-Date -ErrorAction Stop} 
+      Catch {Write-Warning "Problem updating file $File"}   
       
     } # end if
     else {
-      try {$null | out-file -Append -FilePath $file -ErrorAction stop} 
-      Catch {Write-Warning "Problem writing to file $file"}   
+      try {$null | out-file -Append -FilePath $File -ErrorAction stop} 
+      Catch {Write-Warning "Problem writing to file $File"}   
     } # end else
   } # end foreach
 } #end function
