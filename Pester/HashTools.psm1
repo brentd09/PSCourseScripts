@@ -7,7 +7,7 @@
   # Only the last line of code will give the expected (Asserted) result.
 
 #  First attempt
-#  $Hash[1..5]
+  $Hash[1..5]
 #  Next attempt
 #  $Hash[0..6]
 #  Final attempt

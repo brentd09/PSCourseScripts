@@ -1,4 +1,4 @@
-﻿Describe {
+﻿Describe "envFormat" {
   It "Converts '<value' to '<expected>'" -TestCases @(
     @{Value = 'BigData';Expected = 'Big_Data'}
     @{Value = 'ABC';Expected = 'A_B_C'}
