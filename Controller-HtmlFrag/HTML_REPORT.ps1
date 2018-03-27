@@ -17,7 +17,9 @@ do {
           $Svc = Convert-ServiceToHtml
           $Prc = Convert-ProcessToHtml
           $Html = Merge-HtmlFragments -SvcFrag $Svc -PrcFrag $Prc -CSSBlock $CSS
-          Save-Html -HtmlDoc $html 
+          $SaveResult = Save-Html -HtmlDoc $html
+          Write-Host "The report was written to $SaveResult.path"
+          Read-Host 
       }
       2 { 
           "BYE"
@@ -25,6 +27,7 @@ do {
       Default {
         "Wrong selection try again"
         $BadChoice = $true
+        Start-Sleep -Seconds 3
       }
   }
 } while ($BadChoice -eq $true -or $Selection -eq 1)

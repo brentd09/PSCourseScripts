@@ -65,5 +65,7 @@ function Save-Html {
   $Path = "$home\Documents\report.html"
   )
   $HtmlDoc | Out-File $Path
+  $objProp = @{Path = $Path}
+  New-Object -TypeName psobject -Property $objProp
 }
 
