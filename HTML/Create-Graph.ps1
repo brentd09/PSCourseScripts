@@ -16,13 +16,13 @@ $Cities = @{London=7556900; Berlin=3429900; Madrid=3213271; Rome=2726539;Paris=2
 $Chart.Series["Data"].Points.DataBindXY($Cities.Keys, $Cities.Values)
 # display the chart on a form 
 $Chart.Anchor = [System.Windows.Forms.AnchorStyles]::Bottom -bor [System.Windows.Forms.AnchorStyles]::Right -bor [System.Windows.Forms.AnchorStyles]::Top -bor [System.Windows.Forms.AnchorStyles]::Left 
-$Form = New-Object Windows.Forms.Form 
-$Form.Text = "PowerShell Chart" 
-$Form.Width = 800 
-$Form.Height = 600 
-$Form.controls.add($Chart) 
-$Form.Add_Shown({$Form.Activate()}) 
-$Form.ShowDialog()
+#$Form = New-Object Windows.Forms.Form 
+#$Form.Text = "PowerShell Chart" 
+#$Form.Width = 800 
+#$Form.Height = 600 
+#$Form.controls.add($Chart) 
+#$Form.Add_Shown({$Form.Activate()}) 
+#$Form.ShowDialog()
 # add title and axes labels 
 [void]$Chart.Titles.Add("Top 5 European Cities by Population") 
 $ChartArea.AxisX.Title = "European Cities" 
