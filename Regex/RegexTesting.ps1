@@ -55,14 +55,14 @@ $NoMatchName = @('Server-MEL-01','Server-SYD-10')
 Write-Host -ForegroundColor Green   "What Regex string would match the following"
 Write-Host -ForegroundColor Green   "Match all of these"
 $MatchName
-Write-Host -ForegroundColor Green   "`nbut not match any of these"
+Write-Host -ForegroundColor Green -NoNewline  "but "
+Write-Host -ForegroundColor Red -NoNewline "not "
+Write-Host -ForegroundColor Green "match any of these"
 $NoMatchName
 $regex = Read-Host -Prompt "`nEnter the RegEx string"
 $TotalMatches = ($MatchName).count
-$TotalNoMatches = ($NoMatchName).count
 $CountMatches = ($MatchName -match $regex ).count
 $CountNoMatch = ($NoMatchName -match $regex).count
-if ($CountMatches -eq $TotalMatches) { $RegexGood = $true}
-else { $RegexGood = $false}
-if ($CountNoMatch -eq $false -and $RegexGood -eq $true) {"Regex was successful"} 
-else {"The regex failed"; $RegexGood = $false}
+if ($CountMatches -eq $TotalMatches -and $CountNoMatch -eq 0) { "Regex was successful"}
+else { "The regex failed"}
+
