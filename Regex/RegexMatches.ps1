@@ -7,5 +7,5 @@
   }
 }
 
-Get-SocketInfo | Format-Table -AutoSize
+Get-SocketInfo
 
