@@ -4,11 +4,16 @@
 ### This command will find the error type used in the Catch statement 
 
 Try {
-  Get-ChildItem $env:TMP\test123 -ErrorAction stop
+  Get-Content $env:TMP\test123 -ErrorAction stop
 }
 Catch [System.Management.Automation.ItemNotFoundException] {
   "The error was relating to the item not being located"
 }
+Catch [System.UnauthorizedAccessException] {
+  "The error was relating to a lack of permissions"
+}
 Catch {
   "The error was somthing else"
 }
+
+
