@@ -62,3 +62,13 @@
     New-Object -TypeName psobject -Property $outputProp
   } #END Foreach
 } #END Function
+
+function Get-NewRandomADUsers {
+  [CmdletBinding()]
+  Param (
+    [string]$URI = 'https://my.api.mockaroo.com/random_ad_users.json?key=fe812050'
+  )
+  $NewUsersCsv = Invoke-RestMethod -Method Get -Uri $URI -UseBasicParsing
+  $NewUsers = $NewUsersCsv | ConvertFrom-Csv
+  $NewUsers
+}
