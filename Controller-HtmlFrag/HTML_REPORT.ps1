@@ -18,8 +18,8 @@ do {
           $Prc = Convert-ProcessToHtml
           $Html = Merge-HtmlFragments -SvcFrag $Svc -PrcFrag $Prc -CSSBlock $CSS
           $SaveResult = Save-Html -HtmlDoc $html
-          Write-Host "The report was written to $SaveResult.path"
-          Read-Host 
+          Write-Host "The report was written to $($SaveResult.path)"
+          Read-Host "Press Enter to continue"
       }
       2 { 
           "BYE"
