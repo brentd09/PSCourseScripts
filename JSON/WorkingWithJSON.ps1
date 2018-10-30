@@ -13,3 +13,5 @@
 '@
 
 $PSArray = $json | ConvertFrom-Json
+$PSArray.employees += ($PSArray.employees | Select-Object @{n='Email';e={($_.firstName).tolower()+'.'+($_.lastName).tolower()+'@adatum.com'}})
+$PSArray
