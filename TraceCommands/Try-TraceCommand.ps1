@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Traces what PowerShell is doing in the background
+    Traces what PowerShell is doing in the background.
 .DESCRIPTION
     The Trace-Command can trace the background processing for any of the following, regarding cmdlets and 
     pipelines. This command gives great insight into the actual working of the ByValue/ByPropertyName 
