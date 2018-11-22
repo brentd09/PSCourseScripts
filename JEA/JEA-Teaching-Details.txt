@@ -1,0 +1,109 @@
+JEA - Just Enough Administration
+--------------------------------
+JEA is simple to configure as long as you know a few key things. 
+You need to configure a PSRoleCapabilityFile and a PSSessionConfiguationFile. The Capability 
+file needs to be discoverable as discussed later. The PSSessionConfigurationFile links to the 
+PSRoleCapabilityFile when Registering and EndPoint.
+JEA sessions natively do not allow GUI tools to run. so you need to create functions for the 
+sub admins to do their work.
+
+PSCapabilityFile
+----------------
+The PSCapabilityFile will dictate what is available to the user when they connect. 
+A skeleton template file can be created by using the PS CmdLet: 
+New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc
+and it must be saved with .psrc extension and must be saved into a MODULE directory 
+in a RoleCapabilities subfolder as it must be auto located by the PSSessionConfigurationFile.
+
+Create the JEA Module path
+--------------------------
+Create the following, (on the target machine):
+C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities  
+Populate the JEA folder with a JEA.psm1 file containing the functions that JEA connections will use.
+Also populate the RoleCapabilities directory with all of the .psrc files for this target, this keeps 
+the files centrally managed and makes the modules and RoleCapabilities auto discoverable.
+
+The PSCapabilityFile dictates the folowing:
+Modules to Import
+visible cmdlets 
+visible functions
+visible aliases
+Visible External Commands
+and more.
+
+PSSessionConfigurationFile
+--------------------------
+The PSSessionConfigurationFile does not need to be installed anywhere special because
+when you register an endpoint you call the file using a path. It must be saved with a 
+.pssc extension.
+A skeleton template can be created by:
+New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full
+
+The PSSessionConfigurationFile will dictate the following:
+RoleDefinitions      -> Which users/groups get which autolocated RoleCapabilityFile.
+SessionType          -> Default or RestrictedRemote (later is preffered as it restricts as default)
+TransscriptDirectory -> Where to dump the transcript files
+RunAsVirtualAccount  -> Create a onetime/PSSession local user linked to your account so that 
+                        accidents are contained to that machine only
+ExecutionPolicy      -> Policy applied to the session
+and more.
+
+PSSessionConfigurationFiles scanned each session
+------------------------------------------------
+One interesting aspect of JEA is that once a session and capability files have been Registered, 
+if you alter the capability files, the session endpoint that is registered automatically picks 
+up the new settings when the next PSSession get initiated. No re-registering of the endpoint is
+required.
+
+Register an EndPoint
+--------------------
+With these two files on a target server you can now register an EndPoint using:
+Register-PSSessionConfiguration -Name NameofEndpoint -ConfigurationTypeName c:\PSSessionConfigFile.pssc
+In the process of registering the endpoint the SessionconfiguartionFile will autolocate the 
+PSRoleCapabilityFile that was saved in the RoleCapabilities folder in a Module directory under a 
+Modules directory (This is how it is auto located).
+
+
+GUI Tool
+--------
+Show the JEA Helper Tool v2
+
+Advanced Powershell Training
+----------------------------
+I think it will be best not to cover the JEA subject from the courseware from 10962C as the information
+in the course is hard to follow if you do not have a good big picture regarding how JEA actually works.
+
+So in teaching this I suggest that we go through a demo like the following:
+1. Create a JEA RoleCapabilities directory:
+     C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
+2. Create a template RoleCapabilitiesFile:
+     New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc in the above directory 
+     Configure this file:
+        Modules to Import
+        VisibleCmdlets
+        VisibleFunctions
+        Visible External Commands
+3. Create a JEA SessionConfig file:
+     New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full
+     Configure this file:
+       SessionType
+       TranscriptDirectory   (make sure this directory exists on the target machine)
+       RunAsVirtualAccount
+       RoleDefinitions   (setup a user or group as DOM\GRP and then add the capability name, this is autodiscovered)
+4. Register an endpoint on the target machine:
+     Register-PSSessionConfiguration -Name NameofEndpoint -ConfigurationTypeName c:\PSSessionConfigFile.pssc
+     (Only the PSSessionConfigurationFile path is required as it locates the .psrc files automatically)
+5. Test JEA:
+     on LON-CL1 run the following:
+       Login as standard user (with no admin access but has JEA access per the Session Config file)
+       Invoke-Command -ComputerName LON-DC1 -ScriptBlock {<PScmdlet that you have access to>} -ConfigurationName NameOfEndpoint 
+       Invoke-Command -ComputerName LON-DC1 -ScriptBlock {<PScmdlet that you have no access to>} -ConfigurationName NameOfEndpoint
+       Change the .psrc file on LON-DC1 to include second cmdlet, then rerun prvious two invoke-commands
+       Try running the Invoke-Command without the -ConfigurationName NameOfEndpoint (it will fail)
+6. Check Capability of a user:
+     On LON-DC1
+     Get-PSSessionCapability -ConfurationName NameofEndpoint -UserName DOM\USER
+7. Check SessionConfig settings:
+     Get-PSSessionConfiguration -Name NameofEndpoint
+     
+FINISHED!
