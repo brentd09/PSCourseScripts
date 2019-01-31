@@ -67,6 +67,11 @@ GUI Tool
 --------
 Show the JEA Helper Tool v2
 
+JEA Permissions
+---------------
+When using JEA ordinary users that have been givien the access to commands can use these commands as if they were administrators. For example a normal user 'BOB' if given the rights to use Set-ADUser can user that command to change user's details.<br>
+<strong>So be careful which commands someone is given</strong>
+
 JEA Demo for training
 ---------------------
 I think it will be best not to cover the JEA subject from the courseware from 10962C as the information
