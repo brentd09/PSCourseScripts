@@ -7,19 +7,13 @@ PSRoleCapabilityFile when Registering and EndPoint.
 JEA sessions natively do not allow GUI tools to run. so you need to create functions for the 
 sub admins to do their work.
 
-PSCapabilityFile
-----------------
-The PSCapabilityFile will dictate what is available to the user when they connect. For example: which cmdlets, functions, ext commands etc are visable. A skeleton template file can be created by using the PS CmdLet: <BR>
-<strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> <BR>
-It must be saved with a <strong>.psrc</strong> extension and must be saved into a RoleCapabilities sub-folder of a Autoloader module path as it must be auto located by the PSSessionConfigurationFile.
-
 Create the JEA Module path
 --------------------------
 Create the following, (on the target machine):
 <strong>C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong>  
 Populate the JEA folder with a JEA.psm1 file containing the functions that JEA connections will use.<BR>
 Next you will need to create a module manifest file using: 
-<strong>New-ModuleManifest -Path <ModulePath>\JEA.psd1 -RootModule <ModulePath>\JEA.psm1</strong><BR>
+<strong>New-ModuleManifest -Path {ModulePath}\JEA.psd1 -RootModule {ModulePath}\JEA.psm1</strong><BR>
 Also populate the <strong>RoleCapabilities</strong> sub-directory with all of the <strong>.psrc</strong> files for this target, this keeps 
 the files centrally managed and makes the modules and RoleCapabilities auto discoverable.
 
@@ -31,13 +25,22 @@ visible aliases<BR>
 Visible External Commands<BR>
 and more.<BR>
 
+PSCapabilityFile
+----------------
+The PSCapabilityFile will dictate what is available to the user when they connect. For example: which cmdlets, functions, ext commands etc are visable. A skeleton template file can be created by using the PS CmdLet: <BR>
+This file must be created in a RoleCapabilities sub folder of the module autoloader path for example:
+<strong>CD C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong> <BR>
+<strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> <BR>
+It must be saved with a <strong>.psrc</strong> extension.
+
 PSSessionConfigurationFile
 --------------------------
 The PSSessionConfigurationFile does not need to be installed anywhere special because
 when you register an endpoint you call the file using a path. It must be saved with a 
-<strong>.pssc</strong> extension. I would however store it, as a best practice in the <ModulePath>\RoleCapabilities folder
+<strong>.pssc</strong> extension. <BR>
+I would however store it, as a best practice in the {ModulePath}\RoleCapabilities folder
 this helps centralise the files <BR>
-A skeleton template can be created by:<BR>
+A skeleton template can be created by using:<BR>
 <strong>New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full</strong><BR>
 
 The PSSessionConfigurationFile will dictate the following:<BR>
@@ -48,10 +51,6 @@ RunAsVirtualAccount  -> Create a onetime/PSSession local user linked to your acc
 ExecutionPolicy      -> Policy applied to the session<BR>
 and more.<BR>
 
-PSSessionConfigurationFiles Changes
------------------------------------
-After each change to the .pssc file you <strong>need to unregister and register the endpoint</strong> 
-
 Register an EndPoint
 --------------------
 With these two files on a target server you can now register an EndPoint using:<BR>
@@ -60,6 +59,9 @@ In the process of registering the endpoint the SessionconfiguartionFile will aut
 PSRoleCapabilityFile that was saved in the RoleCapabilities folder in a Module directory under a 
 Modules directory (This is how it is auto located).
 
+PSRoleCapability File Changes
+-----------------------------------
+If you edit the Role Capabilities file the person using the remote session to this machine would need to kill the remote session and remake a new session to see the new capabilities come into effect! You do not have to re-register the endpoint.
 
 GUI Tool
 --------
@@ -97,8 +99,8 @@ So in teaching this I suggest that we go through a demo like the following:<BR>
 5. <strong>LON-CL1</strong> - Test JEA:<BR>
      Run the following:
        Login user (the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions)<BR>
-       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName EndpointName</strong><BR>
-       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName EndpointName</strong><BR>
+       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint</strong><BR>
+       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint</strong><BR>
        Change the .psrc file on LON-DC1 to include second cmdlet, then re-run previous two invoke-commands
        Try running the Invoke-Command without the -ConfigurationName NameOfEndpoint (it will fail)<BR>
 6. <strong>LON-DC1</strong> - Check Capability of a user:<BR>
