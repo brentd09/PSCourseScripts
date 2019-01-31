@@ -12,7 +12,7 @@ Create the JEA Module path
 Create the following, (on the target machine):
 <strong>C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong>  
 Populate the JEA folder with a JEA.psm1 file containing the functions that JEA connections will use.<BR>
-Next you will need to create a module manifest file using: 
+Next you will need to create a module manifest file using: <br>
 <strong>New-ModuleManifest -Path {ModulePath}\JEA.psd1 -RootModule {ModulePath}\JEA.psm1</strong><BR>
 Also populate the <strong>RoleCapabilities</strong> sub-directory with all of the <strong>.psrc</strong> files for this target, this keeps 
 the files centrally managed and makes the modules and RoleCapabilities auto discoverable.
