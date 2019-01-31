@@ -75,8 +75,7 @@ So in teaching this I suggest that we go through a demo like the following:<BR>
      <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
      In the JEA autoload directory:<BR> 
      Create an empty <strong>JEA.psm1</strong> file<BR>
-     Create a manifest file<BR>
-     <strong>New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1</Strong>
+     Create a manifest file using: <strong>New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1</Strong>
 2. <strong>LON-DC1</strong> - Create a template RoleCapabilitiesFile:<BR>
      <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> (in the RoleCapabilities directory) 
      Edit this file to configure the following:<BR>
