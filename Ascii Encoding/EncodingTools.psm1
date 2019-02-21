@@ -17,7 +17,7 @@ function ConvertFrom-Base64 {
     [Parameter(Mandatory=$true)]
     [string]$Base64String
   )
-  $Bytes = [System.Convert]::FromBase64String($Bas64String)
+  $Bytes = [System.Convert]::FromBase64String($Base64String)
   $EncodingType = [System.Text.Encoding]::ASCII
   $ASCIIString = $EncodingType.GetString($Bytes)
   $ObjProp = [ordered]@{
