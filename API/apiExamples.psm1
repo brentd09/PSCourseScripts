@@ -33,7 +33,7 @@
      ConvertTo-LatLngCoords -City "1600 Pennsylvania Avenue, Washington DC"
      You can further refine this to an address, for example the White House
      address in Washington DC
-  .PARAMETER city
+  .PARAMETER Keyword
      Choose any major or semi-major city in the world to be converted into 
      Coordicates. You can give as much detail as you wish, just seperate the
      street, city, state, country by commas.
@@ -48,16 +48,17 @@
   [CmdletBinding()]
   Param(
     [parameter(Mandatory=$true)]
-    [string[]]$City
+    [string[]]$Keyword
   )
-  $resultAPI = Invoke-RestMethod -Method Get -Uri "https://maps.googleapis.com/maps/api/geocode/json?address=${City}&sensor=false" -UseBasicParsing
-  $locations = $resultAPI.results
+  $resultAPI = Invoke-RestMethod -Method Get -Uri "http://open.mapquestapi.com/nominatim/v1/search.php?key=AIbKZU5vHad4mwwyDoXAZwxALKclkbDQ&format=json&q=$Keyword" -UseBasicParsing
+  $locations = $resultAPI 
   foreach ($location in $locations) {  # Just in case there are multiple cities with same name
-    $Coords = $location.geometry.location
     $outputProp = [ordered]@{
-      Lat = ('{0:N6}' -f $Coords.lat) -as [double]
-      Lng = ('{0:N6}' -f $Coords.lng) -as [double]
-      City = $location.formatted_address
+      Lat = ('{0:N6}' -f $Location.lat) -as [double]
+      Lng = ('{0:N6}' -f $location.lon) -as [double]
+      City = $location.Display_Name
+      Class = $location.Class
+      Type = $location.Type
     } # END Hashtable
     New-Object -TypeName psobject -Property $outputProp
   } #END Foreach
