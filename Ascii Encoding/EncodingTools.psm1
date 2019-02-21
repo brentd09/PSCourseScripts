@@ -7,7 +7,7 @@ function Convertto-Base64 {
   $Base64 = [System.Convert]::ToBase64String($Bytes)
   $ObjProp = [ordered]@{
     Text = $TextToConvert
-    Base64 = $Base64
+    Base64 = $Base64String
   }
   New-Object -TypeName psobject -Property $ObjProp
 }
