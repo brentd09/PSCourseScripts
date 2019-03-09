@@ -26,4 +26,4 @@
 $DiceResult = [Dice]::New(2,6)
 1..10 | ForEach-Object {
   $DiceResult.Roll() 
-}| Get-Random
+}
