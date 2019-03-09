@@ -1,12 +1,10 @@
 ﻿Class Dice {
   [int]$Count
   [int]$Faces
-  [int]$WeightedFace
 
   Dice ($DCount,$DFaces,$DWeight) {
     $this.Count = $DCount
     $this.Faces = $DFaces
-    $this.WeightedFace = $DWeight
   }
 
   [psobject]Roll () {
@@ -25,7 +23,7 @@
   }
 }
 
-$DiceResult = [Dice]::New(2,6,0)
+$DiceResult = [Dice]::New(2,6)
 1..10 | ForEach-Object {
   $DiceResult.Roll() 
 }| Get-Random
