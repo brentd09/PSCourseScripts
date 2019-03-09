@@ -2,7 +2,7 @@
   [int]$Count
   [int]$Faces
 
-  Dice ($DCount,$DFaces,$DWeight) {
+  Dice ($DCount,$DFaces) {
     $this.Count = $DCount
     $this.Faces = $DFaces
   }
