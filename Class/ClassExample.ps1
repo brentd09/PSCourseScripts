@@ -21,7 +21,6 @@ class Vehicle {
       elseif ($NumberDoors -eq 2) {$this.Type = 'Cab'}
     }
     else {$this.Type = 'Unknown'}
-    
   }
 }
 
