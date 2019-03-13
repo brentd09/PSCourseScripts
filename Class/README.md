@@ -15,6 +15,6 @@ To share classes you can create a module file do the following:
 1. Create a module and declare the classes within it.
 2. Save this module in an autoloading folder
 3. Create another module in which you would like to use the Classes from Step 1
-4. At the top of the module file use **USING Module** ModuleName.
+4. At the top of the module file use the "**USING Module** ModuleName" command.
 
 The USING command will not only load the module it will also import any classes as well.
