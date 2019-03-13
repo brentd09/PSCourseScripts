@@ -7,9 +7,9 @@ Classes can be created in scripts and in modules. However these Classes can not 
 other scripts and modules.
 
 ## Share Classes
-We have had the ability in PowerShell to import other modules for some time now with the 
+We have had the ability in PowerShell to import other modules for some time with the 
 Import-Module command, however while this successfully imports the functions from a 
-module it does not import any Classes created in that module.
+module it does not import any **classes** created in that module.
 
 To share classes you can create a module file do the following:
 1. Create a module and declare the classes within it.
