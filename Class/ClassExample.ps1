@@ -17,7 +17,7 @@ class Vehicle {
       elseif ($NumberDoors -eq 2) {$this.Type = 'Coupe'}
     }
     elseif ($Class -eq 'Ute') {
-      if ($NumberDoors -eq 4 ) {$this.Type = 'KinCab'}
+      if ($NumberDoors -eq 4 ) {$this.Type = 'KingCab'}
       elseif ($NumberDoors -eq 2) {$this.Type = 'Cab'}
     }
     else {$this.Type = 'Unknown'}
