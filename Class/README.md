@@ -1,11 +1,14 @@
 Classes in PowerShell
 ----------------------------------------------
 
-When creating classes that need to be used by many modules, you can 
-create a module that just creates the base classes and then place that 
-module in an auto-loading directory (See $Env:PSModulePath)
+*Classes can be created in PowerShell 5.0 and later.*
 
-In the modules that will use the classes use the following syntax:
-Using Module <ModuleName>
-Place this at the top on the module that will use these classes defined
-in module declared in the Using statement
+Classes can be created in scripts and in modules. However these Classes can not be used by
+other scripts and modules.
+
+*Share Classes*
+We have had the ability in PowerShell to import other modules for some time now with the 
+Import-Module command, however while this successfully imports the functions from a 
+module it does not import any Classes created in that module.
+
+To share classes you can create a module file ps
