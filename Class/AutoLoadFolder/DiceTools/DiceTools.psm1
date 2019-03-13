@@ -1,5 +1,5 @@
 ﻿USING Module DiceClass
-Function Roll-Dice {
+Function Show-DiceRoll {
   Param (
     [Parameter(Mandatory=$true)]
     [int]$NumberOfDice,
