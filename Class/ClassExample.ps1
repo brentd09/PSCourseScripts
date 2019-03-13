@@ -1,16 +1,16 @@
 class Vehicle {
   [string]$Clasification
-  [int]$numberOfWheels
-  [int]$numberOfDoors
-  [int]$yearOfCar
-  [string]$modelOfCar
+  [int]$NumberOfWheels
+  [int]$NumberOfDoors
+  [int]$YearOfCar
+  [string]$ModelOfCar
   [string]$Type
 
   Vehicle ($NumberDoors,$Year,$Model,$Class) {
-    $this.numberOfWheels = 4
-    $this.modelOfCar = $Model
-    $this.numberOfDoors = $NumberDoors
-    $this.yearOfCar = $Year
+    $this.NumberOfWheels = 4
+    $this.ModelOfCar = $Model
+    $this.NumberOfDoors = $NumberDoors
+    $this.YearOfCar = $Year
     $this.Clasification = $Class
     if ($Class -eq 'Car') {
       if ($NumberDoors -eq 4 ) {$this.Type = 'Sedan'}
@@ -26,8 +26,8 @@ class Vehicle {
 
 
 
-$carObj = [Vehicle]::New(2,1990,'Holden','Car')
+$CarObj = [Vehicle]::New(2,1990,'Holden','Car')
 $UteObj = [Vehicle]::New(4,1990,'Holden','Ute')
 
-$carObj
+$CarObj
 $UteObj
