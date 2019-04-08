@@ -24,7 +24,7 @@ try {
   if ($GCMResult.CommandType -in @('Cmdlet','Function')) {
     $GCMResult.Parameters.Values |
       Where-Object {$_.Aliases.Count -ge 1} | 
-      Select-Object -Property Name,Aliases
+      Select-Object -Property @{n='ParameterName';e={$_.Name}},Aliases
   }
   else {Write-Warning "$PSCmd is not a PowerShell Cmdlet"}
 }
