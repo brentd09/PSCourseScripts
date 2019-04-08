@@ -26,13 +26,14 @@ Param (
   [string]$PSCmd 
 )
 try {
-  try {$AliasInfo = Get-Alias $PSCmd -ErrorAction stop -ErrorVariable }
-  catch {Remove-Variable AliasInfo}
+  try {$AliasInfo = Get-Alias $PSCmd -ErrorAction stop}
+  catch { try {Remove-Variable AliasInfo -ErrorAction stop}catch{}}
   if ($AliasInfo) {$PSCmd = $AliasInfo.ReferencedCommand}
   $GCMResult = Get-Command $PSCmd -ErrorAction stop
   if ($GCMResult.CommandType -in @('Cmdlet','Function')) {
     Clear-Host 
-    Write-host "Command Name:$PSCmd`n"
+    Write-host -NoNewline "Command Name: "
+    Write-Host -ForegroundColor Green "$PSCmd"
     $GCMResult.Parameters.Values |
       Where-Object {$_.Aliases.Count -ge 1} | 
       Select-Object -Property @{n='ParameterName';e={$_.Name}},Aliases
