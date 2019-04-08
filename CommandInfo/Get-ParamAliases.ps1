@@ -29,4 +29,4 @@ try {
   }
   else {Write-Warning "$PSCmd is not a PowerShell Cmdlet"}
 }
-catch {Write-Warning "There was an error locating the command $PSCmd"}
+catch {Write-Warning "There was an error locating the Cmdlet $PSCmd"}
