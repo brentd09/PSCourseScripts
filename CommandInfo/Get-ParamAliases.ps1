@@ -23,7 +23,7 @@ try {
   $GCMResult = Get-Command $PSCmd -ErrorAction stop
   if ($GCMResult.CommandType -in @('Cmdlet','Function')) {
     $GCMResult.Parameters.Values |
-      Where-Object {$_.NumberAliases.Count -ge 1} | 
+      Where-Object {$_.Aliases.Count -ge 1} | 
       Select-Object -Property Name,Aliases
   }
   else {Write-Warning "$PSCmd is not a PowerShell Cmdlet"}
