@@ -26,6 +26,6 @@ try {
       Where-Object {$_.Aliases.Count -ge 1} | 
       Select-Object -Property @{n='ParameterName';e={$_.Name}},Aliases
   }
-  else {Write-Warning "$PSCmd is not a PowerShell Cmdlet"}
+  else {Write-Warning "$PSCmd is not a PowerShell Cmdlet or Function"}
 }
 catch {Write-Warning "There was an error locating the Cmdlet $PSCmd"}
