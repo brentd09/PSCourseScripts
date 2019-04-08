@@ -21,7 +21,7 @@ Param (
 )
 try {
   $GCMResult = Get-Command $PSCmd -ErrorAction stop
-  if ($GCMResult.CommandType -eq 'Cmdlet') {
+  if ($GCMResult.CommandType -in @('Cmdlet','Function')) {
     $GCMResult.Parameters.Values |
       Select-Object -Property Name,Aliases,@{n='NumberAliases';e={$_.Aliases.Count}} |
       Where-Object {$_.NumberAliases -ge 1} | 
