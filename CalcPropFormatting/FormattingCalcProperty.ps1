@@ -11,3 +11,9 @@ get-volume |
 get-volume | 
   Where-Object {$_.DriveType -eq "Fixed"} |
   Select-Object -Property DriveLetter,@{n="SpaceUsed(GB)";e={("{0:N2}" -f (($_.size - $_.sizeremaining) / 1GB)) -as [double]}} 
+
+# The best way
+
+get-volume | 
+  Where-Object {$_.DriveType -eq "Fixed"} |
+  Select-Object -Property DriveLetter,@{n="SpaceUsed(GB)";e={[math]::Round(($_.size - $_.sizeremaining) / 1GB,2)}} 
