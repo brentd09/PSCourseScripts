@@ -5,16 +5,24 @@
   This script monitors services and then creates a HTML doc based on the service statuses.
   The web page automatically refreshes every 10 seconds. For this to work however there
   needs to be a scheduled job created that will re-run the PowerShell script every minute 
-  to refresh the web document.
+  to refresh the web document. To have this work without modifying the code have IIS 
+  installed on the machine you are placeing this script have a reporting virtual directory
+  created in IIS mapped to c:\inetpub\wwwroot\reporting, copy this script into the virual 
+  directory and run it manually the first time. The first time run will setup the Scheduled
+  Job and then the web report is visible if you point to the virtual directory from the 
+  browser URL. Example http://Localhost/reporting.
+  This web page can be left open as it will refresh itself every ten seconds and the 
+  scheduled job to check the services will run every minute to recreate the web page.
+  If you have all of the related files in the Reporting virtual directory it is a more 
+  tidy option tha having files all over the drive.
 .EXAMPLE
-  PS C:\> <example usage>
-  Explanation of what the example does
-.INPUTS
-  Inputs (if any)
-.OUTPUTS
-  Output (if any)
+  Create-RefreshingMonitorSite.ps1
+.EXAMPLE
+  Create-RefreshingMonitorSite.ps1 -ScriptPath
 .NOTES
   General notes
+    Created by: Brent Denny
+    Created on: 16 April 2019
 #>
 [CmdletBinding()]
 Param (
