@@ -1,4 +1,4 @@
-$trig = New-JobTrigger -RepetitionInterval 0:01:00 -RepeatIndefinitely -at 00:00 -once
+$trig = New-JobTrigger -RepetitionInterval 0:01:00 -RepeatIndefinitely -at 09:13 -once
 Register-ScheduledJob -Name report -Trigger $trig -ScriptBlock {
 $CSS = @'
 <style>
