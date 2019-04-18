@@ -1,18 +1,24 @@
-$trig = New-JobTrigger -RepetitionInterval 0:01:00 -RepeatIndefinitely -at 09:13 -once
-Register-ScheduledJob -Name report -Trigger $trig -ScriptBlock {
-$CSS = @'
+# $trig = New-JobTrigger -RepetitionInterval 0:01:00 -RepeatIndefinitely -at 09:13 -once
+# Register-ScheduledJob -Name report -Trigger $trig -FilePath c:\Create-RefreshingMonitorSite.ps1
+$Opac = .8
+$CSS = @"
 <style>
-  body {background-color:rgba(86, 86, 186,.4)}
-  table, th, td, tr {border:solid;border-collapse:collapse;width:50%;border-color:black}
-  th {background-color:LightGray;}
-  .Stopped {background-color:rgba(193, 0, 0,1);color:white;}
-  .Running {background-color:rgba(0, 135, 51,.3);}
+  h1 {font-size:400%;text-align:center;}
+  body {background-image: url("ddls_contactus.jpg");background-size:cover;}
+  table, th, td, tr {border:solid;border-collapse:collapse;width:100%;border-color:black;table-layout:fixed;font-size:110%}
+  th {background-color:rgba(142, 142, 142,$Opac);Color:White;font-size:200%}
+  .StoppedManual td {background-color:rgba(255, 144, 0,$Opac);}
+  .StoppedAutomatic td {background-color:rgba(255, 0, 0,$Opac);}
+  .StoppedDisabled td {background-color:rgba(255, 255, 0,$Opac);}
+  .RunningManual td {background-color:rgba(2, 98, 252,$Opac);}
+  .RunningAutomatic td {background-color:rgba(1, 181, 7,$Opac);}
 </style>
-'@
+"@
 
-$HTMLDoc= Get-Service -Name Browser,LanmanServer,LanmanWorkstation,Audiosrv,BITS,Dhcp,Dnscache,Netlogon,Spooler,W32Time,wuauserv | 
-  Select-Object Status,StartType,Name |
-  ConvertTo-Html -Head "<meta http-equiv='refresh' content='10'>$CSS" -PreContent "<h1>Servicng Monitoring</h1>" 
-$OutDoc = $HTMLDoc -replace "<tr><td>(\w+)</td>", '<tr class="$1"><td>$1</td>' 
+$HTMLDoc= Get-Service | 
+  Select-Object Status,Name,StartType |
+  Sort-Object -Property Status,StartType,Name |
+  ConvertTo-Html -Head "<meta http-equiv='refresh' content='10'>$CSS" -PreContent "<h1>Service Monitoring</h1>" 
+$OutDoc = $HTMLDoc -replace "<tr><td>(\w+)</td><td>(\w+)</td><td>(\w+)</td></tr>",'<tr class="$1$3"><td>$1</td><td>$2</td><td>$3</td></tr>' 
+
 $OutDoc | Out-File C:\inetpub\wwwroot\index.html
-}
