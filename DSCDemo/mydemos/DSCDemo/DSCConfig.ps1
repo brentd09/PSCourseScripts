@@ -18,8 +18,5 @@
     } # File
   } # Node
 
-  #Node 'LON-DC1' {
-  #  File WebShare
-  #}
 } # Configuration
 
