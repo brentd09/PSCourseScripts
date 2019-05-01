@@ -58,3 +58,14 @@ do {
 } until ($Value -le 1)
 
 # Break and Continue
+$Numbers = @(1,2,550,0,89,4,10,234)
+foreach ($Number in $Numbers) {
+  if ($Number -eq 0) {continue}
+  1024 / $number
+}
+
+$Numbers = @(1,2,550,0,89,4,10,234)
+foreach ($Number in $Numbers) {
+  if ($Number -eq 0) {break}
+  1024 / $number
+}
