@@ -12,6 +12,9 @@
 [CmdletBinding()]
 Param()
 
+
+# (Get-WmiObject -Class win32_bios ).properties | Select-Object -Property @{n='Info';e={$_.Name + " = " + $_.Value}}
+
 Add-Type -AssemblyName System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles()
 
