@@ -5,12 +5,12 @@ Function Get-Enum {
   .DESCRIPTION
     This script finds the enumeration for a .Net class
   .EXAMPLE
-    Get-Enum -TypeClass '[System.ServiceProcess.ServiceControllerStatus]'
+    Get-Enum -TypeClass 'System.ServiceProcess.ServiceControllerStatus'
     This will inspect the class and determine what values are associated 
     with the names in the Enumeration
   .PARAMETER TypeClass
     This needs to be a string that includes the entire name of the class 
-    wrapped in [ ]
+    wrapped in ' ' without entering the square brackets 
   .NOTES
     General notes
     Created by: Brent Denny
