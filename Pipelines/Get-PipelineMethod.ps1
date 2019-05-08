@@ -34,7 +34,7 @@ $ByPN  = $false
 $SimpleString = $false
 try {
   try {
-    Get-Command $FirstCommand -ErrorAction stop
+    Get-Command $FirstCommand -ErrorAction stop *> $null
   }
   catch {
     $FirstCmdObjectType = ($FirstCommand).GetType().Name
