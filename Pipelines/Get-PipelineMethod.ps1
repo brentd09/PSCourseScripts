@@ -2,13 +2,13 @@
 .SYNOPSIS
   Shows how a pipelin will work
 .DESCRIPTION
-  This script shows how a pipeline will work for two commands. It will
-  test the logic of ByValue first to see if this is possible. It then
-  will check ByPropertyName piping. If this fails it will show that the 
-  pipeline is not possible.
+  This script shows how a pipeline will work for two commands. If that 
+  fails it will test the logic of ByValue first to see if this is possible. 
+  If notiIt then will check ByPropertyName piping. If this fails it will 
+  show that the pipeline is not possible.
 .EXAMPLE
   Get-PipeLineMethod -FirstCommand 'get-service' -SecondCommand 'Stop-Service'
-  This will discover how or if the pipeline works and if it does, what method 
+  This will discover if the pipeline works and if it does, what method 
   of pipeline is used (ByValue or ByPropertyName)
 .PARAMETER FirstCommand
   This is the first command in the pipeline from left to right
@@ -28,13 +28,25 @@ Param (
 )
 
 Clear-Host
-Write-Host -ForegroundColor Yellow "How Does the Pipe Line work`n---------------------------`n"
 $ByPNArray = @()
 $ByVal = $false
 $ByPN  = $false
+$SimpleString = $false
 try {
-  $FirstCmdObjectType = (Invoke-Expression $FirstCommand -ErrorAction stop)[0].gettype().name
-  $GetMemberResult = (Invoke-Expression $FirstCommand -ErrorAction stop)[0] | Get-Member -MemberType Properties
+  try {
+    Get-Command $FirstCommand -ErrorAction stop
+  }
+  catch {
+    $FirstCmdObjectType = ($FirstCommand).GetType().Name
+    $GetMemberResult = $FirstCommand | Get-Member -MemberType Properties
+    $SimpleString = $true
+  }
+  finally {
+    if ($SimpleString -eq $false) {
+        $FirstCmdObjectType = (Invoke-Expression $FirstCommand -ErrorAction stop)[0].gettype().name
+        $GetMemberResult = (Invoke-Expression $FirstCommand -ErrorAction stop)[0] | Get-Member -MemberType Properties
+    }
+  }
   $FirstCmdProperties = $GetMemberResult | Select-Object Name, @{n='PropertyObjType';e={
   #  This tests to see if the member is an alias if not get the type, if it is then find the property it is refering to first
   if ($_.MemberType -notlike 'Alias*') {$_.definition -replace '^(?:\w+\.)*(\w+)\W.*$','$1'}
@@ -51,6 +63,7 @@ try {
     if ($TypeName.type.name -match $FirstCmdObjectType) {$ByVal = $true; break}
   }
   # Try ByValue logic first
+  Write-Host -ForegroundColor Yellow "How Does the Pipe Line work`n---------------------------`n"
   If ($ByVal -eq $true -and $ByPN -eq $false) {
     Write-host -ForegroundColor Yellow -NoNewline "$FirstCommand `| $SecondCommand "
     Write-Host -NoNewline "will pipeline data "
@@ -92,6 +105,12 @@ try {
     }
   }
 }
-Catch {
-  Write-Warning "There was a problem with one of the commands"
+Catch [System.Management.Automation.CommandNotFoundException] {
+  Write-Warning "The first command does not exist"
+}
+catch [Microsoft.PowerShell.Commands.HelpNotFoundException] {
+  Write-Warning "The second command does not exist"
+}
+catch {
+  Write-Warning "An error was detected with the script"
 }
