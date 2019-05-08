@@ -80,7 +80,7 @@ try {
     foreach ($Param in $SecondCmdParamThatPipeByPN) {
       $ParamTypeName =  $Param.Type.Name -replace '([a-z]+)[^a-z]*','$1'
       if ($Param.Name -in $FirstCmdProperties.Name) {
-        $FirstCmdPropEqToParam = $FirstCmdProperties | where {$_.name -eq $Param.Name}
+        $FirstCmdPropEqToParam = $FirstCmdProperties | Where-Object {$_.name -eq $Param.Name}
         if ($FirstCmdPropEqToParam.PropertyObjType -eq $ParamTypeName) {
           $ByPN = $true
           $ByPNArray += $FirstCmdPropEqToParam
