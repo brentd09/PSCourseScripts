@@ -37,8 +37,8 @@ try {
     Get-Command $FirstCommand -ErrorAction stop *> $null
   }
   catch {
-    $FirstCmdObjectType = ($FirstCommand).GetType().Name
-    $GetMemberResult = $FirstCommand | Get-Member -MemberType Properties
+    $FirstCmdObjectType = (Invoke-Expression $FirstCommand).GetType().Name
+    $GetMemberResult = Invoke-Expression $FirstCommand | Get-Member -MemberType Properties
     $SimpleString = $true
   }
   finally {
@@ -83,7 +83,13 @@ try {
         $FirstCmdPropEqToParam = $FirstCmdProperties | Where-Object {$_.name -eq $Param.Name}
         if ($FirstCmdPropEqToParam.PropertyObjType -eq $ParamTypeName) {
           $ByPN = $true
-          $ByPNArray += $FirstCmdPropEqToParam
+          $OutputHash = [ordered]@{
+            FirstCommandProperty   = $Param.Name
+            ObjectType             = $ParamTypeName
+            SecondCommandParameter = $Param.Name
+          }
+          $ByPNOutputObj = New-Object -TypeName psobject -Property $OutputHash
+          $ByPNArray += $ByPNOutputObj
         }
       }
     }
@@ -96,9 +102,7 @@ try {
       Write-Host -ForegroundColor Green -NoNewline 'BYPROPERTYNAME'
       Write-Host ' to the corresponding'
       Write-Host 'parameters in the SECOND COMMAND with the same names'
-      $FirstCmdPropEqToParam | Select-Object -Property @{n="$FirstCommand Properties";e={$_.Name}},
-                                                       @{n='Object Type';e={$_.PropertyObjType}},
-                                                       @{n="$SecondCommand Parameters";e={$_.Name}}
+      $ByPNArray
     }
     if ($ByVal -eq $false -and $ByPN -eq $false) {
       Write-Host -ForegroundColor Red "The pipeline has no way of passing the data"

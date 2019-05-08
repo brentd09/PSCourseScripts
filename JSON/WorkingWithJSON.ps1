@@ -34,11 +34,11 @@ $CompanyObj | ConvertTo-Json
 
 Write-Host "Now that email has been added we will add another employee"
 Read-Host -Prompt "Press ENTER to see the new JSON data"
-$NewNodeProps = @{
-  fistName = 'Gretta'
+$NewNodeProps = [ordered]@{
+  firstName = 'Gretta'
   LastName = 'Garbo'
   Email = 'gretta.garbo@adatum.com'
 }
 $NewNodeObj = New-Object -TypeName psobject -Property $NewNodeProps
 $CompanyObj.employees += $NewNodeObj
-$CompanyObj | ConvertTo-Json
+$CompanyObj | ConvertTo-Json 
