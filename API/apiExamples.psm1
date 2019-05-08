@@ -22,7 +22,7 @@
      7                0.0000001        1.11 cm
      8                0.00000001       1.11 mm
   .EXAMPLE
-     ConvertTo-LatLngCoords -Keyword Sydney
+     ConvertTo-LatLngCoords -Keyword Sydney -APIKey 123456787
      This will look for locations that have Sydney in its name. The script will 
      then return an object showing: Long,Lat,City,Class and Type place found.
   .PARAMETER Keyword
@@ -40,9 +40,12 @@
   [CmdletBinding()]
   Param(
     [parameter(Mandatory=$true)]
-    [string[]]$Keyword
+    [string[]]$Keyword,
+    [parameter(Mandatory=$true)]
+    [string[]]$APIKey
+
   )
-  $resultAPI = Invoke-RestMethod -Method Get -Uri "http://open.mapquestapi.com/nominatim/v1/search.php?key=AIbKZU5vHad4mwwyDoXAZwxALKclkbDQ&format=json&q=$Keyword" -UseBasicParsing
+  $resultAPI = Invoke-RestMethod -Method Get -Uri "http://open.mapquestapi.com/nominatim/v1/search.php?key=$APIKey&format=json&q=$Keyword" -UseBasicParsing
   $locations = $resultAPI 
   foreach ($location in $locations) {  # Just in case there are multiple cities with same name
     $outputProp = [ordered]@{
@@ -59,9 +62,10 @@
 function Get-NewRandomADUsers {
   [CmdletBinding()]
   Param (
-    [string]$URI = 'https://my.api.mockaroo.com/random_ad_users.json?key=fe812050'
+    [parameter(Mandatory=$true)]
+    [string[]]$APIKey
   )
-  $NewUsersCsv = Invoke-RestMethod -Method Get -Uri $URI -UseBasicParsing
+  $NewUsersCsv = Invoke-RestMethod -Method Get -Uri "https://my.api.mockaroo.com/random_ad_users.json?key=$APIKey" -UseBasicParsing
   $NewUsers = $NewUsersCsv | ConvertFrom-Csv
   $NewUsers
 }
