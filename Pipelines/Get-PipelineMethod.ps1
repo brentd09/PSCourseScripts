@@ -6,7 +6,8 @@ Param (
   [string]$SecondCommand
 )
 
-# Test pipeline by Value first
+
+$ByPNArray = @()
 $ByVal = $false
 $ByPN  = $false
 $FirstCmdObjectType = (Invoke-Expression $FirstCommand)[0].gettype().name
@@ -27,7 +28,7 @@ foreach ($TypeName in $SecondCmdParamThatPipeByVal) {
   if ($TypeName.type.name -match $FirstCmdObjectType) {$ByVal = $true; break}
 }
 # Try ByValue logic first
-If ($ByVal -eq $true) {
+If ($ByVal -eq $true -and $ByPN -eq $false) {
   Write-host -ForegroundColor Yellow -NoNewline "$FirstCommand `| $SecondCommand "
   Write-Host -NoNewline "will pipeline data "
   Write-Host -ForegroundColor green "ByValue"
@@ -39,8 +40,27 @@ If ($ByVal -eq $true) {
   Write-Host -ForegroundColor Green $PipeingByValParam
 }
 else {
-  
-
+  foreach ($Param in $SecondCmdParamThatPipeByPN) {
+    $ParamTypeName =  $Param.Type.Name -replace '([a-z]+)[^a-z]*','$1'
+    if ($Param.Name -in $FirstCmdProperties.Name) {
+      $FirstCmdPropEqToParam = $FirstCmdProperties | where {$_.name -eq $Param.Name}
+      if ($FirstCmdPropEqToParam.PropertyObjType -eq $ParamTypeName) {
+        $ByPN = $true
+        $ByPNArray += $FirstCmdPropEqToParam
+      }
+    }
+  }
+  If ($ByPN -eq $true -and $ByVal -eq $false) {
+    Write-host -ForegroundColor Yellow -NoNewline "$FirstCommand `| $SecondCommand "
+    Write-Host -NoNewline "will pipeline data "
+    Write-Host -ForegroundColor green "ByPropertyName"
+    Write-Host 'These are the Properties that will pipe '
+    Write-Host 'to corresponding parameters in the second command'
+    $FirstCmdPropEqToParam | Select-Object -Property @{n="$FirstCommand Properties";e={$_.Name}},
+                                                     @{n='Object Type';e={$_.PropertyObjType}},
+                                                     @{n="$SecondCommand Parameters";e={$_.Name}}
+  }
+  if ($ByVal -eq $false -and $ByPN -eq $false) {
+    Write-Host -ForegroundColor Red "The pipeline has no way of passing the data"
+  }
 }
-
-# Test pipeline by PropertyName if Value failed
