@@ -3,9 +3,9 @@
   Shows how a pipelin will work
 .DESCRIPTION
   FirstCommand | SecondCommand
-  This script shows how a pipeline will work for two commands. If that 
-  fails it will test the logic of ByValue first to see if this is possible. 
-  If notiIt then will check ByPropertyName piping. If this fails it will 
+  This script shows how a pipeline will work for two commands. It will 
+  test the logic of ByValue pipeing first to see if this is possible. 
+  If not it then will check ByPropertyName piping. If this fails it will 
   show that the pipeline is not possible.
 .EXAMPLE
   Get-PipeLineMethod -FirstCommand 'get-service' -SecondCommand 'Stop-Service'
