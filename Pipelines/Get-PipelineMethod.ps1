@@ -73,7 +73,7 @@ try {
     Write-host -NoNewline "The SECOND COMMAND can accept "
     write-host -NoNewline -ForegroundColor Green $FirstCmdObjectType
     Write-Host  " piped "
-    Write-Host -NoNewline "ByValue via the parameter "
+    Write-Host -NoNewline "ByValue via the parameter `n"
     Write-Host -ForegroundColor Green $PipeingByValParam
   }
   else {
@@ -105,7 +105,7 @@ try {
       $ByPNArray
     }
     if ($ByVal -eq $false -and $ByPN -eq $false) {
-      Write-Host -ForegroundColor Red "The pipeline has no way of passing the data"
+      Write-Host -ForegroundColor Red "The pipeline has no way of passing the data `n"
     }
   }
 }
