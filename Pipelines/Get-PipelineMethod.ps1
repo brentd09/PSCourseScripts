@@ -2,17 +2,24 @@
 .SYNOPSIS
   Shows how a pipelin will work
 .DESCRIPTION
+  FirstCommand | SecondCommand
   This script shows how a pipeline will work for two commands. If that 
   fails it will test the logic of ByValue first to see if this is possible. 
   If notiIt then will check ByPropertyName piping. If this fails it will 
   show that the pipeline is not possible.
 .EXAMPLE
   Get-PipeLineMethod -FirstCommand 'get-service' -SecondCommand 'Stop-Service'
-  This will discover if the pipeline works and if it does, what method 
+  FirstCommand | SecondCommand
+  This script tries to simulate what would take place through the pipeline
+  it will try to discover if the pipeline works and if it does, what method 
   of pipeline is used (ByValue or ByPropertyName)
 .PARAMETER FirstCommand
+  FirstCommand | SecondCommand
+  ------------
   This is the first command in the pipeline from left to right
 .PARAMETER SecondCommand
+  FirstCommand | SecondCommand
+                 -------------
   This is the second command in the pipeline
 .NOTES
   General notes
