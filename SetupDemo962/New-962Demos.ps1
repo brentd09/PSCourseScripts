@@ -19,7 +19,7 @@ Param (
   [pscredential]$Cred =  (Get-Credential -UserName 'Adatum\Administrator' -Message 'Type the password')
 )
 try {
-  $LocalDemoPath = $LocalGitPath + '\PSCourseAids\DSCDemo\mydemos\WebDemo'
+  $LocalDemoPath = ($LocalGitPath + '\PSCourseAids\DSCDemo\mydemos\WebDemo') -replace '\\{2,}','\'
   $VMs = Get-VM -ErrorAction Stop
   if ($VMs.State -contains "Stopped") {
     $VMs | Where-Object {$_.State -ne 'Running'} | Start-VM
@@ -39,4 +39,6 @@ try {
     Set-DnsServerForwarder -IPAddress '8.8.8.8'
   }
 }
-Catch {}
+Catch {
+  Write-Warning "An error occured?" 
+}
