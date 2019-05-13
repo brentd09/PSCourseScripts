@@ -27,15 +27,15 @@ try {
     Start-Sleep -Seconds 20
   }
   if ((Get-PSSession).Name -notcontains 'DCsession' -and $VMSessionDC1.VMName -eq '10962C-LON-DC1') {
-    $VMSessionDC1 = New-PSSession -VMName '10962C-LON-DC1' -Credential $Cred -Name DCSession
+    $VMSessionDC1 = New-PSSession -VMName '10962C-LON-DC1' -Credential $Cred -Name DCSession -ErrorAction stop
   }
   if ((Get-PSSession).Name -notcontains 'CLsession' -and $VMSessionCL1.VMName -eq '10962C-LON-CL1') {
-    $VMSessionCL1 = New-PSSession -VMName '10962C-LON-CL1' -Credential $Cred -Name CLSession
+    $VMSessionCL1 = New-PSSession -VMName '10962C-LON-CL1' -Credential $Cred -Name CLSession -ErrorAction stop
   }
   Copy-Item -Path $LocalDemoPath -Destination 'E:\WebDemo' -Force -ToSession $VMSessionDC1 -Recurse
   Copy-Item -Path $LocalGitPath -Destination 'E:\GIT' -Force -Recurse -ToSession $VMSessionCL1
-  Invoke-Command -Session $VMSessionDC1 -ScriptBlock {
-    New-SmbShare -Name 'WebDemo' -Path E:\WebDemo
+  Invoke-Command -ErrorAction stop -Session $VMSessionDC1 -ScriptBlock {
+    New-SmbShare -Name 'WebDemo' -Path E:\WebDemo -ContinuouslyAvailable 
     Set-DnsServerForwarder -IPAddress '8.8.8.8'
   }
 }
