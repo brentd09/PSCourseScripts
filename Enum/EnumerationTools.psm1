@@ -22,13 +22,21 @@ Function Get-Enum {
     [Parameter(Mandatory=$true)]
     [string]$TypeClass
   )
-
-  $EnumList = [enum]::GetValues($TypeClass)
-  foreach ($Enum in $EnumList) {
-    $HashTable = [ordered]@{
-      Number = $Enum.Value__
-      Name   = $Enum
+  $ErrorActionPreference = 'Stop'
+  try {
+    $EnumList = [enum]::GetValues($TypeClass)
+    foreach ($Enum in $EnumList) {
+      $HashTable = [ordered]@{
+        Number = $Enum.Value__
+        Name   = $Enum
+      }
+      new-object -TypeName psobject -Property $HashTable
     }
-    new-object -TypeName psobject -Property $HashTable
+  }
+  catch [System.Management.Automation.MethodException] {
+    write-warning "$TypeClass - Does not appear to be an [Enum]" 
+  }
+  finally {
+    $ErrorActionPreference = 'Continue'
   }
 }
