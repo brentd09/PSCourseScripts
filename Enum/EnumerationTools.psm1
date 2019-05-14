@@ -22,13 +22,13 @@ Function Get-Enum {
     [Parameter(Mandatory=$true)]
     [string]$TypeClass
   )
-  $EnumNum = [enum]::GetValues($TypeClass).Value__
-  $EnumStr = [enum]::GetNames($TypeClass)
-  foreach ($Index in (0..($EnumNum.count - 1))) {
-    $NewObjProps = [ordered]@{
-      Number = $EnumNum[$Index]
-      Name   = $EnumStr[$Index]
+
+  $EnumList = [enum]::GetValues($TypeClass)
+  foreach ($Enum in $EnumList) {
+    $HashTable = [ordered]@{
+      Number = $Enum.Value__
+      Name   = $Enum
     }
-    New-Object -TypeName psobject -Property $NewObjProps
+    new-object -TypeName psobject -Property $HashTable
   }
 }
