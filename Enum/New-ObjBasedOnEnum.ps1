@@ -29,5 +29,8 @@ Class Car {
   }
 }
 
-$CarObj = [Car]::New('Mazda','CX5','White')
-$CarObj
+$Car1Obj = [Car]::New('Mazda','CX5','White')
+$Car1Obj
+
+$Car2Obj = [Car]::New(1,'Ranger',5)
+$Car2Obj
