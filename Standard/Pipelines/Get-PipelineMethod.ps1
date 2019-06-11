@@ -115,10 +115,10 @@ try {
   }
 }
 Catch [System.Management.Automation.CommandNotFoundException] {
-  Write-Warning "The first command does not exist"
+  Write-Warning "The first command does not exist or cannot import the module"
 }
 catch [Microsoft.PowerShell.Commands.HelpNotFoundException] {
-  Write-Warning "The second command does not exist"
+  Write-Warning "The second command does not exist or cannot import the module"
 }
 catch {
   Write-Warning "An error was detected with the script"
