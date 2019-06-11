@@ -24,7 +24,8 @@
 .NOTES
   General notes
   Created by: Brent Denny
-  Created on: 8-May-2019
+  Created on:  8-May-2019
+  Modified  : 11-Jun-2019
 #>
 [CmdletBinding()]
 Param (
@@ -35,6 +36,8 @@ Param (
 )
 
 Clear-Host
+$FirstCommand  = (Get-Culture).TextInfo.ToTitleCase($FirstCommand)
+$SecondCommand = (Get-Culture).TextInfo.ToTitleCase($SecondCommand)
 $ByPNArray = @()
 $ByVal = $false
 $ByPN  = $false
@@ -70,17 +73,15 @@ try {
     if ($TypeName.type.name -match $FirstCmdObjectType) {$ByVal = $true; break}
   }
   # Try ByValue logic first
-  Write-Host -ForegroundColor Yellow "How Does the Pipe Line work`n---------------------------`n"
+  Write-Host -ForegroundColor Cyan "How Does the Pipe Line work`n---------------------------`n"
   If ($ByVal -eq $true -and $ByPN -eq $false) {
-    Write-host -ForegroundColor Yellow -NoNewline "$FirstCommand `| $SecondCommand "
-    Write-Host -NoNewline "will pipeline data "
-    Write-Host -ForegroundColor green "ByValue"
-    Write-Host -NoNewline "The FIRST COMMAND created an object of type "
-    Write-Host -ForegroundColor green $FirstCmdObjectType
-    Write-host -NoNewline "The SECOND COMMAND can accept "
-    write-host -NoNewline -ForegroundColor Green $FirstCmdObjectType
-    Write-Host  " piped "
-    Write-Host -NoNewline "ByValue via the parameter `n"
+    Write-Host -NoNewline "   Pipeline:  "
+    Write-host -ForegroundColor Green "$FirstCommand `| $SecondCommand `n"
+    Write-Host -NoNewline "Pipe Method:  "
+    Write-Host -ForegroundColor Green "ByValue"
+    Write-Host -NoNewline "Object type:  "
+    Write-Host -ForegroundColor Green $FirstCmdObjectType
+    Write-host -NoNewline "  Parameter:  "
     Write-Host -ForegroundColor Green $PipeingByValParam
   }
   else {
@@ -91,9 +92,9 @@ try {
         if ($FirstCmdPropEqToParam.PropertyObjType -eq $ParamTypeName) {
           $ByPN = $true
           $OutputHash = [ordered]@{
-            FirstCommandProperty   = $Param.Name
-            ObjectType             = $ParamTypeName
-            SecondCommandParameter = $Param.Name
+            "$FirstCommand Property"   = $Param.Name
+            ObjectType         = $ParamTypeName
+            "$SecondCommand Parameter"  = $Param.Name
           }
           $ByPNOutputObj = New-Object -TypeName psobject -Property $OutputHash
           $ByPNArray += $ByPNOutputObj
@@ -101,14 +102,11 @@ try {
       }
     }
     If ($ByPN -eq $true -and $ByVal -eq $false) {
-      Write-host -ForegroundColor Yellow -NoNewline "$FirstCommand `| $SecondCommand "
-      Write-Host -NoNewline "will pipeline data "
+      Write-Host -NoNewline "   Pipeline:  "
+      Write-host -ForegroundColor Green "$FirstCommand `| $SecondCommand `n"
+      Write-Host -NoNewline "Pipe method:  "
       Write-Host -ForegroundColor green "ByPropertyName"
-      Write-Host 'The following table shows properties from the FIRST COMMAND'
-      Write-Host -NoNewline 'that will pipe '
-      Write-Host -ForegroundColor Green -NoNewline 'BYPROPERTYNAME'
-      Write-Host ' to the corresponding'
-      Write-Host 'parameters in the SECOND COMMAND with the same names'
+      Write-Host -ForegroundColor Green -NoNewline "`nFollowing table shows the ByPropertyName Mappings:"
       $ByPNArray
     }
     if ($ByVal -eq $false -and $ByPN -eq $false) {
