@@ -6,6 +6,51 @@ file needs to be discoverable as discussed later. The PSSessionConfigurationFile
 PSRoleCapabilityFile when Registering and EndPoint.
 JEA sessions natively do not allow GUI tools to run. so you need to create functions for the 
 sub admins to do their work.
+     
+
+JEA Security Considerations
+---------------------------
+JEA helps you improve your security posture by reducing the number of permanent administrators on your machines. 
+JEA uses a PowerShell session configuration to create a new entry point for users to manage the system. 
+Users who need elevated, but not unlimited, access to the machine to do administrative tasks can be granted access to the JEA endpoint.
+Since JEA allows these users to run admin commands without having full admin access, you can then remove those users from highly privileged security groups.
+
+Run-As account
+--------------
+Each JEA endpoint has a designated run-as account. 
+This is the account under which the connecting user's actions are executed. 
+This account is configurable in the session configuration file, and the account you choose has a significant bearing on the security of your endpoint.
+
+Virtual accounts are the recommended way of configuring the run-as account. 
+Virtual accounts are one-time, temporary local accounts that are created for the connecting user to use during the duration of their JEA session. 
+As soon as their session is terminated, the virtual account is destroyed and can't be used anymore. 
+The connecting user doesn't know the credentials for the virtual account. 
+The virtual account can't be used to access the system via other means like Remote Desktop or an unconstrained PowerShell endpoint.
+
+By default, virtual accounts belong to the local Administrators group on the machine. 
+This gives them full rights to manage anything on the system, but no rights to manage resources on the network. 
+When authenticating with other machines, the user context is that of the local computer account, not the virtual account.
+
+Domain controllers are a special case since there isn't a local Administrators group. 
+Instead, virtual accounts belong to Domain Admins and can manage the directory services on the domain controller. 
+The domain identity is still restricted for use on the domain controller where the JEA session was instantiated. 
+Any network access appears to come from the domain controller computer object instead.
+
+In both cases, you may explicitly define which security groups the virtual account belongs to. 
+This is a good practice when the task can be done without local or domain admin privileges. 
+If you already have a security group defined for your admins, grant the virtual account membership to that group. 
+Virtual account group membership is limited to local security groups on workstation and member servers. On domain controllers, virtual accounts must be members of domain security groups. 
+Once the virtual account has been added to one or more security groups, it no longer belongs to the default groups (local or domain admins).
+
+The following table summarizes the possible configuration options and resulting permissions for virtual accounts:
+
+Computer type |	Virtual account group configuration |	Local user context |	Network user context
+---|---|---|---
+Domain controller |	Default |	Domain user, member of 'DOMAIN\Domain Admins'|	Computer account
+Domain controller |	Domain groups A and B |	Domain user, member of 'DOMAIN\A', 'DOMAIN\B' |	Computer account
+Member server or workstation |	Default |	Local user, member of 'BUILTIN\Administrators' |	Computer account
+Member server or workstation |	Local groups C and D |	Local user, member of 'COMPUTER\C' and 'COMPUTER\D' |	Computer account
+
 
 Create the JEA Module path
 --------------------------
