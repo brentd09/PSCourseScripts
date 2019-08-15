@@ -54,7 +54,8 @@ and more.<BR>
 Register an EndPoint
 --------------------
 With these two files on a target server you can now register an EndPoint using:<BR>
-<strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path c:\PSSessionConfigFile.pssc -force</strong><BR>
+_(Assuming you are in the folder where the pssc file exists)_     
+<strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\PSSessionConfigFile.pssc -force</strong><BR>
 In the process of registering the endpoint the SessionconfiguartionFile will autolocate the 
 PSRoleCapabilityFile that was saved in the RoleCapabilities folder in a Module directory under a 
 Modules directory (This is how it is auto located).
