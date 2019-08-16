@@ -28,7 +28,7 @@ configuration Sample_xDscWebServiceRegistrationHTTPS
         {
             Ensure                  = "Present"
             EndpointName            = "PSDSCPullServer"
-            Port                    = 8080
+            Port                    = 8081
             PhysicalPath            = "$env:SystemDrive\inetpub\PSDSCPullServer"
             CertificateThumbPrint   = $certificateThumbPrint
             ModulePath              = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
