@@ -170,13 +170,19 @@ When using JEA ordinary users that have been givien the access to commands can u
      ```
 5. <strong>LON-CL1</strong> - Test JEA:<BR>
      Switch to the LON-CL1 client VM </Strong><BR>
-     Login as the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions
+     Login as the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions<BR>
+     Try the allowed command and one that was not allowed:
      ```
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint
      ```
-     Change the .psrc file on LON-DC1 to include second cmdlet, then re-run previous two invoke-commands<BR>
-     Try running the invoke-command with specifying the endpoint:<BR>
+     Change the .psrc file on LON-DC1 to include second cmdlet, then re-run the invoke-command<BR>
+     ```
+     # Edit the .psrc file to allow another cmdlet and you will see it is allowed without re-registration
+     Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Newly Allowed Cmdlet} -ConfigurationName NameofEndpoint
+     ```
+     <BR>
+     Try running the invoke-command without specifying the endpoint:<BR>
      ```
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}</strong><BR>
      # This will fail for a non admin user
