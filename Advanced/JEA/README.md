@@ -133,16 +133,18 @@ When using JEA ordinary users that have been givien the access to commands can u
 <BR>
 1. <strong>LON-DC1</strong> - Create a JEA Module folder with a RoleCapabilities sub-directory:<BR>
      ```
-     <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
-     <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA</strong><BR>
+     New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
+     Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA
      ```
      In the JEA autoload directory:<BR> 
      Create an empty <strong>JEA.psm1</strong> file<BR>
      Create a manifest file using: <BR>
      <strong>New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1</Strong>
 2. <strong>LON-DC1</strong> - Create a template RoleCapabilitiesFile:<BR>
-     <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
-     <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> 
+     ```
+     Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
+     New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc
+     ```
      Edit this file to configure the following:<BR>
      *   Modules to Import
      *   VisibleCmdlets
@@ -150,28 +152,40 @@ When using JEA ordinary users that have been givien the access to commands can u
      *   Visible External Commands
      *   Etc.
 3. <strong>LON-DC1</strong> - Create a JEA SessionConfig file:<BR>
-     <strong>New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full</strong> (in the RoleCapabilities directory for ease of mgmt)
+     ```
+     New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full 
+     # In the RoleCapabilities directory for ease of mgmt
+     ```
      Edit this file to configure the following:<BR>
      *  SessionType
      *  TranscriptDirectory   (make sure this directory exists on the target machine)
      *  RunAsVirtualAccount
      *  RoleDefinitions (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)
 4. <strong>LON-DC1</strong> - Register an endpoint on the target machine:<BR>
-     <strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc</strong>
-     (Only the PSSessionConfigurationFile path is required, as it locates the .psrc files automatically)<BR>
+     ```
+     Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
+     #Only the PSSessionConfigurationFile path is required, as it locates the .psrc files automatically
+     ```
 5. <strong>LON-CL1</strong> - Test JEA:<BR>
-     Run the following:
-     <strong> Switch to the LON-CL1 client VM </Strong><BR>
-       Login user (the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions)<BR>
-       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint</strong><BR>
-       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint</strong><BR>
-       Change the .psrc file on LON-DC1 to include second cmdlet, then re-run previous two invoke-commands
-       Try running the invoke-command with specifying the endpoint:<BR>
-       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}</strong><BR>
-       _This will fail for a non admin user_
+     Switch to the LON-CL1 client VM </Strong><BR>
+     Login as the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions
+     ```
+     Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint
+     Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint
+     ```
+     Change the .psrc file on LON-DC1 to include second cmdlet, then re-run previous two invoke-commands<BR>
+     Try running the invoke-command with specifying the endpoint:<BR>
+     ```
+     Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}</strong><BR>
+     # This will fail for a non admin user
+     ```
 6. <strong>LON-DC1</strong> - Check Capability of a user:<BR>
-     <strong>Get-PSSessionCapability -ConfurationName NameofEndpoint -UserName DOM\USER</strong><BR>
+     ```
+     Get-PSSessionCapability -ConfurationName NameofEndpoint -UserName DOM\USER
+     ```
 7. <strong>LON-DC1</strong> - Check SessionConfig settings:<BR>
-     <strong>Get-PSSessionConfiguration -Name NameofEndpoint</strong><BR>
+     ```
+     Get-PSSessionConfiguration -Name NameofEndpoint
+     ```
      
 FINISHED!
