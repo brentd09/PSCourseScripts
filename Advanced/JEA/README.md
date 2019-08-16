@@ -132,8 +132,10 @@ When using JEA ordinary users that have been givien the access to commands can u
 <strong>Try the following:</strong> 
 <BR>
 1. <strong>LON-DC1</strong> - Create a JEA Module folder with a RoleCapabilities sub-directory:<BR>
-     a. <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
-     b. <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA</strong><BR>
+     ```
+     <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
+     <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA</strong><BR>
+     ```
      In the JEA autoload directory:<BR> 
      Create an empty <strong>JEA.psm1</strong> file<BR>
      Create a manifest file using: <BR>
