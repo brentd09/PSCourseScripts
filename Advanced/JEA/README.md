@@ -139,7 +139,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      In the JEA autoload directory:<BR> 
      Create an empty <strong>JEA.psm1 and manifest file:</strong> file<BR>
      ```
-     New-Item -Type Directory -Path .\ -Name JEA.psm1
+     New-Item -Type File -Path .\ -Name JEA.psm1
      New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1
      ```
 2. <strong>LON-DC1</strong> - Create a template RoleCapabilitiesFile:<BR>
