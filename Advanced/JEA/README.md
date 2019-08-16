@@ -1,11 +1,8 @@
 JEA - Just Enough Administration
 --------------------------------
-JEA is simple to configure as long as you know a few key things. <BR>
-You need to configure a PSRoleCapabilityFile and a PSSessionConfiguationFile. The Capability 
-file needs to be discoverable as discussed later. The PSSessionConfigurationFile links to the 
-PSRoleCapabilityFile when Registering and EndPoint.
-JEA sessions natively do not allow GUI tools to run. so you need to create functions for the 
-sub admins to do their work.
+JEA sets up (Run-As) Full administration endpoints so that non Full Admin people can be allowed to manage the system that they are remotely connecting to via PS Remoting.
+The users can access an endpoint that can be restricted regarding what commands can be executed, what parameters can be used and even what data can be applied to the parameters.
+You can use wildcards when setting up the permissions regarding what commands can be executed, i.e. Get-* whould allow all get commands to be executed, as long as the modules, and providers that they use were also allowed.
      
 
 JEA Security Considerations
