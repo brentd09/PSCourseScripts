@@ -106,8 +106,8 @@ Modules directory (This is how it is auto located).
 Connecting to the EndPoint
 --------------------------
 When a user wishes to connect to the JEA EndPoint they will use one of the following:
-. Invoke-Command -ComputerName ServerName -ConfigurationName NameOfEndPoint -scriptblock {<Allowed commands>}
-. Enter-PSSession -ComputerName ServerName -ConfigurationName NameOfEndPoint
+* Invoke-Command -ComputerName ServerName -ConfigurationName NameOfEndPoint -scriptblock {<Allowed commands>}
+* Enter-PSSession -ComputerName ServerName -ConfigurationName NameOfEndPoint
 _The Enter-PSSession may not be allowed as the restrictions on the endpoint may be so tight that a full session may be not possible_     
 
 <BR><BR>
@@ -132,8 +132,8 @@ When using JEA ordinary users that have been givien the access to commands can u
 <strong>Try the following:</strong> 
 <BR>
 1. <strong>LON-DC1</strong> - Create a JEA Module folder with a RoleCapabilities sub-directory:<BR>
-     <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
-     <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA</strong><BR>
+     a. <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
+     b. <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA</strong><BR>
      In the JEA autoload directory:<BR> 
      Create an empty <strong>JEA.psm1</strong> file<BR>
      Create a manifest file using: <BR>
@@ -142,18 +142,18 @@ When using JEA ordinary users that have been givien the access to commands can u
      <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
      <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> 
      Edit this file to configure the following:<BR>
-     .   Modules to Import
-     .   VisibleCmdlets
-     .   VisibleFunctions
-     .   Visible External Commands
-     .   Etc.
+     *   Modules to Import
+     *   VisibleCmdlets
+     *   VisibleFunctions
+     *   Visible External Commands
+     *   Etc.
 3. <strong>LON-DC1</strong> - Create a JEA SessionConfig file:<BR>
      <strong>New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full</strong> (in the RoleCapabilities directory for ease of mgmt)
      Edit this file to configure the following:<BR>
-     .  SessionType
-     .  TranscriptDirectory   (make sure this directory exists on the target machine)
-     .  RunAsVirtualAccount
-     . RoleDefinitions (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)
+     *  SessionType
+     *  TranscriptDirectory   (make sure this directory exists on the target machine)
+     *  RunAsVirtualAccount
+     *  RoleDefinitions (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)
 4. <strong>LON-DC1</strong> - Register an endpoint on the target machine:<BR>
      <strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc</strong>
      (Only the PSSessionConfigurationFile path is required, as it locates the .psrc files automatically)<BR>
