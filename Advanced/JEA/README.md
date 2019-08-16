@@ -47,7 +47,7 @@ Domain controller |	Default |	Domain user, member of 'DOMAIN\Domain Admins'|	Com
 Domain controller |	Domain groups A and B |	Domain user, member of 'DOMAIN\A', 'DOMAIN\B' |	Computer account
 Member server or workstation |	Default |	Local user, member of 'BUILTIN\Administrators' |	Computer account
 Member server or workstation |	Local groups C and D |	Local user, member of 'COMPUTER\C' and 'COMPUTER\D' |	Computer account
-
+<BR><BR>
 # HOW TO CREATE A JEA ENDPOINT #
 
 Create the JEA Module path
@@ -110,6 +110,9 @@ When a user wishes to connect to the JEA EndPoint they will use one of the follo
 . Enter-PSSession -ComputerName ServerName -ConfigurationName NameOfEndPoint
 _The Enter-PSSession may not be allowed as the restrictions on the endpoint may be so tight that a full session may be not possible_     
 
+<BR><BR>
+# JEA Information     
+     
 PSRoleCapability File Changes
 -----------------------------------
 If you edit the Role Capabilities file the person using the remote session to this machine would need to kill the remote session and remake a new session to see the new capabilities come into effect! You do not have to re-register the endpoint.
@@ -123,42 +126,47 @@ JEA Permissions
 When using JEA ordinary users that have been givien the access to commands can use these commands as if they were administrators. For example a normal user 'BOB' if given the rights to use Set-ADUser can user that command to change user's details.<br>
 <strong>So be careful which commands someone is given</strong>
 
-JEA Demo for training
----------------------
-I think it will be best not to cover the JEA subject from the courseware from 10962C as the information
-in the course is hard to follow if you do not have a good big picture regarding how JEA actually works.
+<BR>
+# JEA Demo 
 
-So in teaching this I suggest that we go through a demo like the following:<BR>
+<strong>Try the following:</strong> 
+<BR>
 1. <strong>LON-DC1</strong> - Create a JEA Module folder with a RoleCapabilities sub-directory:<BR>
      <strong>New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
+     <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA</strong><BR>
      In the JEA autoload directory:<BR> 
      Create an empty <strong>JEA.psm1</strong> file<BR>
      Create a manifest file using: <BR>
      <strong>New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1</Strong>
 2. <strong>LON-DC1</strong> - Create a template RoleCapabilitiesFile:<BR>
-     <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> (in the RoleCapabilities directory) 
+     <strong>Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong><BR>
+     <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> 
      Edit this file to configure the following:<BR>
-        Modules to Import<BR>
-        VisibleCmdlets<BR>
-        VisibleFunctions<BR>
-        Visible External Commands<BR>
+     .   Modules to Import
+     .   VisibleCmdlets
+     .   VisibleFunctions
+     .   Visible External Commands
+     .   Etc.
 3. <strong>LON-DC1</strong> - Create a JEA SessionConfig file:<BR>
      <strong>New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full</strong> (in the RoleCapabilities directory for ease of mgmt)
      Edit this file to configure the following:<BR>
-       SessionType<BR>
-       TranscriptDirectory   (make sure this directory exists on the target machine)<BR>
-       RunAsVirtualAccount<BR>
-       RoleDefinitions (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)<BR>
+     .  SessionType
+     .  TranscriptDirectory   (make sure this directory exists on the target machine)
+     .  RunAsVirtualAccount
+     . RoleDefinitions (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)
 4. <strong>LON-DC1</strong> - Register an endpoint on the target machine:<BR>
      <strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc</strong>
      (Only the PSSessionConfigurationFile path is required, as it locates the .psrc files automatically)<BR>
 5. <strong>LON-CL1</strong> - Test JEA:<BR>
      Run the following:
+     <strong> Switch to the LON-CL1 client VM </Strong><BR>
        Login user (the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions)<BR>
        <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint</strong><BR>
        <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint</strong><BR>
        Change the .psrc file on LON-DC1 to include second cmdlet, then re-run previous two invoke-commands
-       Try running the Invoke-Command without the -ConfigurationName NameOfEndpoint (it will fail)<BR>
+       Try running the invoke-command with specifying the endpoint:<BR>
+       <strong>Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}</strong><BR>
+       _This will fail for a non admin user_
 6. <strong>LON-DC1</strong> - Check Capability of a user:<BR>
      <strong>Get-PSSessionCapability -ConfurationName NameofEndpoint -UserName DOM\USER</strong><BR>
 7. <strong>LON-DC1</strong> - Check SessionConfig settings:<BR>
