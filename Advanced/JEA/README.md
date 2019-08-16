@@ -137,9 +137,11 @@ When using JEA ordinary users that have been givien the access to commands can u
      Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA
      ```
      In the JEA autoload directory:<BR> 
-     Create an empty <strong>JEA.psm1</strong> file<BR>
-     Create a manifest file using: <BR>
-     <strong>New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1</Strong>
+     Create an empty <strong>JEA.psm1 and manifest file:</strong> file<BR>
+     ```
+     New-Item -Type Directory -Path .\ -Name JEA.psm1
+     New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1
+     ```
 2. <strong>LON-DC1</strong> - Create a template RoleCapabilitiesFile:<BR>
      ```
      Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
