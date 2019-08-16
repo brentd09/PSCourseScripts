@@ -182,7 +182,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Newly Allowed Cmdlet} -ConfigurationName NameofEndpoint
      ```
      <BR>
-     Try running the invoke-command without specifying the endpoint:<BR>
+     Try running the invoke-command without specifying the endpoint:
      ```
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}</strong><BR>
      # This will fail for a non admin user
