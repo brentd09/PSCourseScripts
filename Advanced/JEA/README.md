@@ -181,7 +181,6 @@ When using JEA ordinary users that have been givien the access to commands can u
      # Edit the .psrc file to allow another cmdlet and you will see it is allowed without re-registration
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Newly Allowed Cmdlet} -ConfigurationName NameofEndpoint
      ```
-     <BR>
      Try running the invoke-command without specifying the endpoint:
      ```
      Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}
