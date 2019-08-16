@@ -48,6 +48,7 @@ Domain controller |	Domain groups A and B |	Domain user, member of 'DOMAIN\A', '
 Member server or workstation |	Default |	Local user, member of 'BUILTIN\Administrators' |	Computer account
 Member server or workstation |	Local groups C and D |	Local user, member of 'COMPUTER\C' and 'COMPUTER\D' |	Computer account
 
+# HOW TO CREATE A JEA ENDPOINT #
 
 Create the JEA Module path
 --------------------------
@@ -101,6 +102,13 @@ _(Assuming you are in the folder where the pssc file exists)_
 In the process of registering the endpoint the SessionconfiguartionFile will autolocate the 
 PSRoleCapabilityFile that was saved in the RoleCapabilities folder in a Module directory under a 
 Modules directory (This is how it is auto located).
+     
+Connecting to the EndPoint
+--------------------------
+When a user wishes to connect to the JEA EndPoint they will use one of the following:
+. Invoke-Command -ComputerName ServerName -ConfigurationName NameOfEndPoint -scriptblock {<Allowed commands>}
+. Enter-PSSession -ComputerName ServerName -ConfigurationName NameOfEndPoint
+_The Enter-PSSession may not be allowed as the restrictions on the endpoint may be so tight that a full session may be not possible_     
 
 PSRoleCapability File Changes
 -----------------------------------
