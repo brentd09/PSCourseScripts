@@ -184,7 +184,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      <BR>
      Try running the invoke-command without specifying the endpoint:
      ```
-     Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}</strong><BR>
+     Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}
      # This will fail for a non admin user
      ```
 6. <strong>LON-DC1</strong> - Check Capability of a user:<BR>
