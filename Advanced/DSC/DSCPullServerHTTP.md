@@ -5,9 +5,6 @@ configuration Sample_xDscWebServiceRegistration
     (
         [string[]]$NodeName = 'localhost',
 
-        [ValidateNotNullOrEmpty()]
-        [string] $certificateThumbPrint,
-
         [Parameter(HelpMessage='This should be a string with enough entropy (randomness) to protect the registration of clients to the pull server.  We will use new GUID by default.')]
         [ValidateNotNullOrEmpty()]
         [string] $RegistrationKey   # A guid that clients use to initiate conversation with pull server
