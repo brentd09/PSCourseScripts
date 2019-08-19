@@ -22,17 +22,12 @@
   [cmdletbinding()]
   param (
     [Parameter(Mandatory=$true)]
-    [string[]]$Filename
+    [string[]]$FilePaths
   )
-  foreach ($File in $Filename ) {
-    if (Test-Path $File) {
-      try {(Get-ChildItem $File).LastWriteTime = Get-Date -ErrorAction Stop} 
-      Catch {Write-Warning "Problem updating file $File"}   
-      
-    } # end if
-    else {
-      try {$null | out-file -Append -FilePath $File -ErrorAction stop} 
-      Catch {Write-Warning "Problem writing to file $File"}   
-    } # end else
+  foreach ($FilePath in $FilePaths ) {
+    $ParentPath = Split-Path $FilePath -Parent
+    $FileName   = Split-Path $FilePath -Leaf
+    if (Test-Path $FilePath) {$FilePath.LastWriteTime = (Get-Date)}
+    else {New-Item -Path $ParentPath -Name $FileName}
   } # end foreach
 } #end function
