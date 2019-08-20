@@ -28,6 +28,6 @@
     $ParentPath = Split-Path $FilePath -Parent
     $FileName   = Split-Path $FilePath -Leaf
     if (Test-Path $FilePath) {$FilePath.LastWriteTime = (Get-Date)}
-    else {New-Item -Path $ParentPath -Name $FileName}
+    else {New-Item -Path $ParentPath -Name $FileName} 
   } # end foreach
 } #end function
