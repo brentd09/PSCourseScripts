@@ -23,7 +23,7 @@ function Compare-Array {
     [Parameter(Mandatory=$true)]
     [array]$FirstArray,
     [Parameter(Mandatory=$true)]
-    [array]$SecondArray
+    [array]$SecondArray 
   )
 
   $AB = $FirstArray | Where-Object {$_ -notin $SecondArray}
