@@ -72,7 +72,7 @@ This file must be created in a RoleCapabilities sub folder of the module autoloa
 <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> <BR>
 It must be saved with a <strong>.psrc</strong> extension.
      
-## Edit the psrc to modify any of these settings
+#### Edit the psrc to modify any of these settings
 Modules to Import<BR>
 visible cmdlets <BR>
 visible functions<BR>
@@ -91,12 +91,14 @@ A skeleton template can be created by using:<BR>
 <strong>New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full</strong><BR>
 
 The PSSessionConfigurationFile will dictate the following:<BR>
-RoleDefinitions      -> Which users/groups get which autolocated RoleCapabilityFile.<BR>
-SessionType          -> Default or RestrictedRemote (later is preffered as it restricts as default)<BR>
-TransscriptDirectory -> Where to dump the transcript files<BR>
-RunAsVirtualAccount  -> Create a onetime/PSSession local user linked to your account so that accidents are contained to that machine only<BR>
-ExecutionPolicy      -> Policy applied to the session<BR>
-and more.<BR>
+---|---    
+RoleDefinitions | Which users/groups get which autolocated RoleCapabilityFile.
+SessionType | Default or RestrictedRemote (later is preffered as it restricts as default)
+TransscriptDirectory | Where to dump the transcript files
+RunAsVirtualAccount | Create a onetime/PSSession local user linked to your account so that accidents are contained to that machine only
+ExecutionPolicy | Policy applied to the session 
+etc|
+<BR>     
 
 ## Register an EndPoint
 With these two files on a target server you can now register an EndPoint using:<BR>
