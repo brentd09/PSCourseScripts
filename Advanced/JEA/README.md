@@ -91,6 +91,8 @@ A skeleton template can be created by using:<BR>
 <strong>New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full</strong><BR>
 
 The PSSessionConfigurationFile will dictate the following:<BR>
+     
+Setting|Description     
 ---|---    
 RoleDefinitions | Which users/groups get which autolocated RoleCapabilityFile.
 SessionType | Default or RestrictedRemote (later is preffered as it restricts as default)
