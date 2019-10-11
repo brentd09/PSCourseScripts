@@ -1,19 +1,16 @@
-JEA - Just Enough Administration
---------------------------------
+# JEA - Just Enough Administration
 JEA sets up (Run-As) Full administration endpoints so that non Full Admin people can be allowed to manage the system that they are remotely connecting to via PS Remoting.
 The users can access an endpoint that can be restricted regarding what commands can be executed, what parameters can be used and even what data can be applied to the parameters.
 You can use wildcards when setting up the permissions regarding what commands can be executed, i.e. Get-* whould allow all get commands to be executed, as long as the modules, and providers that they use were also allowed.
      
 
-JEA Security Considerations
----------------------------
+## JEA Security Considerations
 JEA helps you improve your security posture by reducing the number of permanent administrators on your machines. 
 JEA uses a PowerShell session configuration to create a new entry point for users to manage the system. 
 Users who need elevated, but not unlimited, access to the machine to do administrative tasks can be granted access to the JEA endpoint.
 Since JEA allows these users to run admin commands without having full admin access, you can then remove those users from highly privileged security groups.
 
-Run-As account
---------------
+## Run-As account
 Each JEA endpoint has a designated run-as account. 
 This is the account under which the connecting user's actions are executed. 
 This account is configurable in the session configuration file, and the account you choose has a significant bearing on the security of your endpoint.
@@ -48,10 +45,10 @@ Domain controller |	Domain groups A and B |	Domain user, member of 'DOMAIN\A', '
 Member server or workstation |	Default |	Local user, member of 'BUILTIN\Administrators' |	Computer account
 Member server or workstation |	Local groups C and D |	Local user, member of 'COMPUTER\C' and 'COMPUTER\D' |	Computer account
 <BR><BR>
-# HOW TO CREATE A JEA ENDPOINT #
+     
+# HOW TO CREATE A JEA ENDPOINT
 
-Create the JEA Module path
---------------------------
+## Create the JEA Module path
 Create the following, (on the target machine):
 <strong>C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong>  
 Populate the JEA folder with a JEA.psm1 file containing the functions that JEA connections will use.<BR>
@@ -68,16 +65,23 @@ visible aliases<BR>
 Visible External Commands<BR>
 and more.<BR>
 
-PSCapabilityFile
-----------------
+## PSCapabilityFile
 The PSCapabilityFile will dictate what is available to the user when they connect. For example: which cmdlets, functions, ext commands etc are visable. A skeleton template file can be created by using the PS CmdLet: <BR>
 This file must be created in a RoleCapabilities sub folder of the module autoloader path for example:
 <strong>CD C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong> <BR>
 <strong>New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc</strong> <BR>
 It must be saved with a <strong>.psrc</strong> extension.
+     
+## Edit the psrc to modify any of these settings
+Modules to Import<BR>
+visible cmdlets <BR>
+visible functions<BR>
+visible aliases<BR>
+Visible External Commands<BR>
+and more.<BR>     
 
-PSSessionConfigurationFile
---------------------------
+## PSSessionConfigurationFile
+
 The PSSessionConfigurationFile does not need to be installed anywhere special because
 when you register an endpoint you call the file using a path. It must be saved with a 
 <strong>.pssc</strong> extension. <BR>
@@ -94,8 +98,7 @@ RunAsVirtualAccount  -> Create a onetime/PSSession local user linked to your acc
 ExecutionPolicy      -> Policy applied to the session<BR>
 and more.<BR>
 
-Register an EndPoint
---------------------
+## Register an EndPoint
 With these two files on a target server you can now register an EndPoint using:<BR>
 _(Assuming you are in the folder where the pssc file exists)_     
 <strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\PSSessionConfigFile.pssc -force</strong><BR>
@@ -103,30 +106,28 @@ In the process of registering the endpoint the SessionconfiguartionFile will aut
 PSRoleCapabilityFile that was saved in the RoleCapabilities folder in a Module directory under a 
 Modules directory (This is how it is auto located).
      
-Connecting to the EndPoint
---------------------------
+## Connecting to the EndPoint
 When a user wishes to connect to the JEA EndPoint they will use one of the following:
 * Invoke-Command -ComputerName ServerName -ConfigurationName NameOfEndPoint -scriptblock {<Allowed commands>}
 * Enter-PSSession -ComputerName ServerName -ConfigurationName NameOfEndPoint
 _The Enter-PSSession may not be allowed as the restrictions on the endpoint may be so tight that a full session may be not possible_     
 
 <BR><BR>
+
 # JEA Information     
      
-PSRoleCapability File Changes
------------------------------------
+## PSRoleCapability File Changes
 If you edit the Role Capabilities file the person using the remote session to this machine would need to kill the remote session and remake a new session to see the new capabilities come into effect! You do not have to re-register the endpoint.
 
-GUI Tool
---------
+## GUI Tool
 Show the JEA Helper Tool v2
 
-JEA Permissions
----------------
+## JEA Permissions
 When using JEA ordinary users that have been givien the access to commands can use these commands as if they were administrators. For example a normal user 'BOB' if given the rights to use Set-ADUser can user that command to change user's details.<br>
 <strong>So be careful which commands someone is given</strong>
 
 <BR>
+
 # JEA Demo 
 
 <strong>Try the following:</strong> 
