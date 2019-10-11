@@ -59,7 +59,7 @@ the files centrally managed and makes the modules and RoleCapabilities auto disc
 
 The PSCapabilityFile dictates the folowing:<BR>
 Modules to Import<BR>
-visible cmdlets <BR>
+<strong>visible cmdlets</strong> <BR>
 visible functions<BR>
 visible aliases<BR>
 Visible External Commands<BR>
@@ -74,7 +74,7 @@ It must be saved with a <strong>.psrc</strong> extension.
      
 #### Edit the psrc to modify any of these settings
 Modules to Import<BR>
-visible cmdlets <BR>
+<strong>visible cmdlets</strong> <BR>
 visible functions<BR>
 visible aliases<BR>
 Visible External Commands<BR>
@@ -154,7 +154,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      ```
      Edit this file to configure the following:<BR>
      *   Modules to Import
-     *   VisibleCmdlets
+     *   <strong>VisibleCmdlets</strong>
      *   VisibleFunctions
      *   Visible External Commands
      *   Etc.
@@ -167,7 +167,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      *  SessionType
      *  TranscriptDirectory   (make sure this directory exists on the target machine)
      *  RunAsVirtualAccount
-     *  RoleDefinitions (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)
+     *  <strong>RoleDefinitions</strong> (setup a user or group as DOM\GRP and then add the capability name(e.g. JEA_AD_mgmt), this is autodiscovered)
 4. <strong>LON-DC1</strong> - Register an endpoint on the target machine:<BR>
      ```
      Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
