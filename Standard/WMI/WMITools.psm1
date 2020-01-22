@@ -1,11 +1,19 @@
 function Get-WmiNamespace {
-    Param (
-        $Namespace='root'
-    )
-    Get-WmiObject -Namespace $Namespace -Class __NAMESPACE | ForEach-Object {
-            ($ns = '{0}\{1}' -f $_.__NAMESPACE,$_.Name)
-            Get-WmiNamespace $ns
+  Param (
+    [string]$RootNamespace='root',
+    [switch]$Classes
+  )
+  $Namespaces =  Get-WmiObject -Namespace $RootNamespace -Class __NAMESPACE | ForEach-Object {
+    Write-Progress -Activity 'Getting all of the name spaces'
+    ($ns = '{0}\{1}' -f $_.__NAMESPACE,$_.Name)
+    Get-WmiNamespace $ns
+  }
+  if ($Classes -eq $false) {$Namespaces}
+  else {
+    foreach ($Namespace in $Namespaces) {
+      Get-WmiObject -Namespace $Namespace -list | Sort-Object -Property Name -Descending
     }
+  }
 }
 
 function invoke-WMIExplorer {
