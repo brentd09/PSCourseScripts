@@ -1,4 +1,32 @@
 function Get-WmiNamespace {
+  <#
+  .SYNOPSIS
+    This will get a list of all namespaces that exist from a chosen root namespace
+  .DESCRIPTION
+    When run with no parameters this command will default to root as the main namespace and 
+    then list all of the namespaces it can find. It also has a parameter that allows you to
+    locate all of the classes within the namespaces that were found.
+  .PARAMETER RootNamespace
+    This parameter allows you to override the default root namespace as the starting point for 
+    the namespace and class search 
+  .PARAMETER Classes
+    This parameter turns on feature that searches for classes within the namespaces found
+  .EXAMPLE
+    Get-WmiNamespace 
+    This will just show a list of namespaces located from the root
+  .EXAMPLE
+    Get-WmiNamespace -RootNamespace root\CIMV2
+    This will show all namespaces that exist under the root\CIMV2 namespace
+  .EXAMPLE
+    Get-WmiNamespace -RootNamespace root\CIMV2 -Classes
+    This will show all of the class names that are found in all of the namespaces under the
+    root\CIMV2 namespace.
+  .NOTES
+    General notes
+      Created By: Brent Denny
+      Created On: 23 Jan 2020
+  #>
+  [CmdletBinding()]    
   Param (
     [string]$RootNamespace='root',
     [switch]$Classes
