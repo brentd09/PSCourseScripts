@@ -37,15 +37,22 @@ function Get-WmiNamespace {
     [string]$RootNamespace='root',
     [switch]$Classes
   )
+  $RootNamespace = $RootNamespace.ToUpper()
   $Namespaces =  Get-WmiObject -Namespace $RootNamespace -Class __NAMESPACE | ForEach-Object {
     Write-Progress -Activity 'Getting all of the name spaces'
     ($ns = '{0}\{1}' -f $_.__NAMESPACE,$_.Name)
     Get-WmiNamespace $ns
   }
-  if ($Classes -eq $false) {$Namespaces}
+  if ($Classes -eq $false) {
+    $RootNamespace
+    $Namespaces
+  }
   else {
+    $Counter = 0
     foreach ($Namespace in $Namespaces) {
-      Get-WmiObject -Namespace $Namespace -list | Sort-Object -Property Name -Descending
+      $Counter++
+      if ($Counter -eq 1) {Get-WmiObject -Namespace $RootNamespace -list | Sort-Object -Property Name -Descending}
+      else {Get-WmiObject -Namespace $Namespace -list | Sort-Object -Property Name -Descending}
     }
   }
 }
