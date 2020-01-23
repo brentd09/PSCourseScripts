@@ -1,3 +1,9 @@
+<#
+  Functions in this module
+  Get-WmiNamespace
+  Invoke-WMIExplorer
+#>
+
 function Get-WmiNamespace {
   <#
   .SYNOPSIS
@@ -44,7 +50,7 @@ function Get-WmiNamespace {
   }
 }
 
-function invoke-WMIExplorer {
+function Invoke-WMIExplorer {
   <#
   .SYNOPSIS
     Finds current settings for WMI classes
@@ -53,60 +59,40 @@ function invoke-WMIExplorer {
     directly in the GUI 
   .NOTES
     General notes
-    Created By: Brent Denny
-    Created on: 10-Jan-2019
+    Created By:  Brent Denny
+    Created on:  10-Jan-2019
+    Last Update: 23 Jan 2020
   #>
   [CmdletBinding()]
   Param()
-  
-  
-  
-  # Added Alternating Row Colours
-  # Added Function for "non-String" translation because the listbox gets cranky.
-  # Added resize to Value column to suit content.
-  # Double click and CTRL + C will copy values to clipboard.
-  # Added remote functions for current logged in user
-  # ComboBoxClass now sorts alphabetically
-  # Added authentication check and error checking for "correct" credentials.
-  # Fixed display of ciminstance objects.
-  
-  
-  
-  
   Add-Type -AssemblyName System.Windows.Forms
   [System.Windows.Forms.Application]::EnableVisualStyles()
-  
-  
-  ### Convert-TypesToString - Converts other obejct times to strings to display in the listbox. Default has not been used in order to catch new/different/unidentified file types.
-  Function Convert-TypesToString($Object){
-      switch ($object.GetType())
-      { 
-          string { $ConvertedString = $Object }
-          string[] { $ConvertedString = [string]::Concat($Object)}
-          uint16 { $ConvertedString = $Object }
-          uint16[] { $ConvertedString = [System.Text.Encoding]::Default.GetString($Object)}
-          uint32 { $ConvertedString = $Object }
-          uint64{ $ConvertedString = $Object }
-          int16 { $ConvertedString = $Object }
-          long { $ConvertedString = $Object }
-          bool { If($object){$ConvertedString = "True"}Else{$ConvertedString = "False"}}
-          datetime {$ConvertedString = (Get-Date $object).ToString()}
-          byte { $ConvertedString = $Object }
-          double { $ConvertedString = $Object }
-          ciminstance { $ConvertedString = $Object.ToString() }
-          default { Write-Host "$($Object) - $($Object.GetType())"; $ConvertedString = "UNHANDLED" }
-      }
+  Function Convert-TypesToString($Object) {
+    switch ($object.GetType()) { 
+      string { $ConvertedString = $Object }
+      string[] { $ConvertedString = [string]::Concat($Object)}
+      uint16 { $ConvertedString = $Object }
+      uint16[] { $ConvertedString = [System.Text.Encoding]::Default.GetString($Object)}
+      uint32 { $ConvertedString = $Object }
+      uint64{ $ConvertedString = $Object }
+      int16 { $ConvertedString = $Object }
+      long { $ConvertedString = $Object }
+      bool { If($object){$ConvertedString = "True"}Else{$ConvertedString = "False"}}
+      datetime {$ConvertedString = (Get-Date $object).ToString()}
+      byte { $ConvertedString = $Object }
+      double { $ConvertedString = $Object }
+      ciminstance { $ConvertedString = $Object.ToString() }
+      default { Write-Host "$($Object) - $($Object.GetType())"; $ConvertedString = "UNHANDLED" }
+    }
    return $ConvertedString
   }
   
-  ### Places the parsed text on the system clipboard.
   Function Set-ClipBoard{
-      Param([string[]]$aTxt)
-      $text=$aTxt|Out-String
-      [System.Windows.Forms.Clipboard]::SetText($text)
+    Param([string[]]$aTxt)
+    $text=$aTxt|Out-String
+    [System.Windows.Forms.Clipboard]::SetText($text)
   }
   
-  ### Updates the Combo Box for when the Namespace/CIM connection changes.
   Function Update-ComboBoxClass{
     $ComboBoxClass.DataSource = @('')
     $labelClassRefresh.ForeColor = '#d0021b'  
@@ -116,53 +102,55 @@ function invoke-WMIExplorer {
     $labelClassRefresh.Text = ""
   }
   
-  ### Checks for open port and authentication before connecting to the CIM instance and sets up the GUI.
   Function Connect-cimTarget{
-      If($args[0] -eq $null){
-          $global:cimTarget = 'localhost'
-      }Else{
-          $global:cimTarget = $args[0]
+    If ($args[0] -eq $null) {
+      $global:cimTarget = 'localhost'
+    }
+    Else {
+      $global:cimTarget = $args[0]
+    }
+    If((Test-NetConnection -Port 5985 -ComputerName $cimTarget -InformationLevel Quiet) -or (Test-NetConnection -Port 5986 -ComputerName $cimTarget -InformationLevel Quiet)){
+      If($CIMSession -ne $Null){ 
+        Remove-CimSession $CIMSession -ErrorAction SilentlyContinue
+        $Global:CIMSession = $null
+      }         
+      try {
+        $Global:CIMSession = New-CimSession -ComputerName $cimTarget -ErrorAction Stop
       }
-      If((Test-NetConnection -Port 5985 -ComputerName $cimTarget -InformationLevel Quiet) -or (Test-NetConnection -Port 5986 -ComputerName $cimTarget -InformationLevel Quiet)){
-              If($CIMSession -ne $Null){ 
-                  Remove-CimSession $CIMSession -ErrorAction SilentlyContinue
-                  $Global:CIMSession = $null
-              }
-              
-              #Try to connect with current credentials and prompt for alternative creds if they fail. We're only trying for alternative credentials once.         
-              try{
-                  $Global:CIMSession = New-CimSession -ComputerName $cimTarget -ErrorAction Stop
-              }catch [Microsoft.Management.Infrastructure.CimException]{
-                  try{
-                      $Global:Credentials = Get-Credential -Message "Current Credentials have failed. Please enter a username and password for a user with appropriate access to WinRM."
-                      $Global:CIMSession = New-CimSession -ComputerName $cimTarget -Credential $Credentials -ErrorAction Stop
-                  }catch {
-                      $ButtonType = [System.Windows.MessageBoxButton]::Ok
-                      $MessageboxTitle = “Authentication has failed”
-                      $Messageboxbody = “Alternate credentials have failed. Please try again and confirm your credentials have appropriate access.”
-                      $MessageIcon = [System.Windows.MessageBoxImage]::Error
-                      [System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$messageicon)
-                  }
-              } finally {
-                  If($CIMSession -ne $Null){
-                      $ListViewOutput.items.Clear()
-                      $labelActualTarget.ForeColor = "Green"
-                      $labelActualTarget.Text = "$($cimTarget) is connected"
-                      $NameSpaces = Get-CimInstance -namespace "root" -class "__Namespace" -CimSession $CIMSession -ErrorAction Stop| Sort-Object -Property name
-                      $ComboBoxNameSpace.DataSource = $NameSpaces.name
-                      $ComboBoxNameSpace.SelectedItem = "CIMV2"
-                  }else{
-                      $labelActualTarget.Text = "ERROR - No Connection"
-                      $labelActualTarget.ForeColor = "Red"
-                  }
-              }
-      }Else{
+      catch [Microsoft.Management.Infrastructure.CimException]{
+        try{
+          $Global:Credentials = Get-Credential -Message "Current Credentials have failed. Please enter a username and password for a user with appropriate access to WinRM."
+          $Global:CIMSession = New-CimSession -ComputerName $cimTarget -Credential $Credentials -ErrorAction Stop
+        }
+        catch {
           $ButtonType = [System.Windows.MessageBoxButton]::Ok
-          $MessageboxTitle = “WinRM is not listening on $($cimTarget)”
-          $Messageboxbody = “WinRM is not listening on ports 5985 or 5986 on remote host $($cimTarget).”
+          $MessageboxTitle = “Authentication has failed”
+          $Messageboxbody = “Alternate credentials have failed. Please try again and confirm your credentials have appropriate access.”
           $MessageIcon = [System.Windows.MessageBoxImage]::Error
-          [System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$messageicon,0,0)
+          [System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$messageicon)
+        }
+      } 
+      finally {
+        If($CIMSession -ne $Null){
+          $ListViewOutput.items.Clear()
+          $labelActualTarget.ForeColor = "Green"
+          $labelActualTarget.Text = "$($cimTarget) is connected"
+          $NameSpaces = Get-CimInstance -namespace "root" -class "__Namespace" -CimSession $CIMSession -ErrorAction Stop| Sort-Object -Property name
+          $ComboBoxNameSpace.DataSource = $NameSpaces.name
+          $ComboBoxNameSpace.SelectedItem = "CIMV2"
+        }else{
+          $labelActualTarget.Text = "ERROR - No Connection"
+          $labelActualTarget.ForeColor = "Red"
+        }
       }
+    }
+    Else {
+      $ButtonType = [System.Windows.MessageBoxButton]::Ok
+      $MessageboxTitle = “WinRM is not listening on $($cimTarget)”
+      $Messageboxbody = “WinRM is not listening on ports 5985 or 5986 on remote host $($cimTarget).”
+      $MessageIcon = [System.Windows.MessageBoxImage]::Error
+      [System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$messageicon,0,0)
+    }
   }
   
   
@@ -266,24 +254,24 @@ function invoke-WMIExplorer {
   
   ### Add options for copying values out for both double click and CTRL + C
   $ListViewOutput.Add_MouseDoubleClick({
-      set-clipboard $ListViewOutput.SelectedItems.SubItems[2].Text
+    set-clipboard $ListViewOutput.SelectedItems.SubItems[2].Text
   })
   
   $ListViewOutput.Add_KeyDown([System.Windows.Forms.KeyEventHandler]{
-      if($_.Control -and $_.KeyCode -eq 'C'){
-           set-clipboard $ListViewOutput.SelectedItems.SubItems[2].Text
-      }
+    if($_.Control -and $_.KeyCode -eq 'C'){
+      set-clipboard $ListViewOutput.SelectedItems.SubItems[2].Text
+    }
   })
   
   $TextBoxTarget.Add_KeyDown([System.Windows.Forms.KeyEventHandler]{
-      if($_.KeyCode -eq 'Enter'){
-           Connect-cimTarget $TextBoxTarget.Text
-      }
+    if($_.KeyCode -eq 'Enter'){
+      Connect-cimTarget $TextBoxTarget.Text
+    }
   })
   
   $ComboBoxNameSpace.Add_SelectedValueChanged({
-      # Moved to function so this can be called again later if target changes.
-      Update-ComboBoxClass
+    # Moved to function so this can be called again later if target changes.
+    Update-ComboBoxClass
   })
   
   $ComboBoxClass.Add_SelectedValueChanged({
@@ -298,27 +286,26 @@ function invoke-WMIExplorer {
       $RowCounter = 0
   
       ForEach($ClassItem in $ClassDetails){
-          $RowCounter++
-          $ListViewItem = $null
-          $ListViewItem = New-Object System.Windows.Forms.ListViewItem($ClassItem.Name)
-          If($ClassItem.Value -ne $Null){
-              $ListviewItem.SubItems.Add("$($ClassItem.Value.GetType())") | Out-Null
-              $ListviewItem.SubItems.Add($(Convert-TypesToString($ClassItem.Value))) | Out-Null
-          }
-          If($RowCounter % 2 -eq 0){
-              $ListViewItem.BackColor = '#F2F2F2'
-          }
-          $ListViewOutput.Items.Add($ListViewItem) | Out-Null
+        $RowCounter++
+        $ListViewItem = $null
+        $ListViewItem = New-Object System.Windows.Forms.ListViewItem($ClassItem.Name)
+        If($ClassItem.Value -ne $Null){
+          $ListviewItem.SubItems.Add("$($ClassItem.Value.GetType())") | Out-Null
+          $ListviewItem.SubItems.Add($(Convert-TypesToString($ClassItem.Value))) | Out-Null
+        }
+        If($RowCounter % 2 -eq 0){
+          $ListViewItem.BackColor = '#F2F2F2'
+        }
+        $ListViewOutput.Items.Add($ListViewItem) | Out-Null
       }
   
       $labelClassRefresh.Text = ''
       #Resize the columns if we have a successful set of items to display (avoids accidently squashing the columns)
-      If($ClassDetails -ne $null){
-          $ListViewOutput.AutoResizeColumns(2)
-          If((($ListViewOutput.Columns[0..2].width) | Measure -Sum).Sum -lt 660){
-              $ListViewOutput.Columns[2].Width = (660 - (($ListViewOutput.Columns[0..1].width) | Measure -Sum).Sum)
-              
-          }
+      If ($ClassDetails -ne $null) {
+        $ListViewOutput.AutoResizeColumns(2)
+        If ((($ListViewOutput.Columns[0..2].width) | Measure -Sum).Sum -lt 660) {
+          $ListViewOutput.Columns[2].Width = (660 - (($ListViewOutput.Columns[0..1].width) | Measure -Sum).Sum)  
+        }
       }
     }
   })
