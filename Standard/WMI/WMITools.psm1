@@ -29,8 +29,9 @@ function Get-WmiNamespace {
     root\CIMV2 namespace.
   .NOTES
     General notes
-      Created By: Brent Denny
-      Created On: 23 Jan 2020
+      Created By:  Brent Denny
+      Created On:  23 Jan 2020
+      Modified On: 26 Jan 2020 
   #>
   [CmdletBinding()]    
   Param (
@@ -38,11 +39,17 @@ function Get-WmiNamespace {
     [switch]$Classes
   )
   $RootNamespace = $RootNamespace.ToUpper()
-  $Namespaces =  Get-WmiObject -Namespace $RootNamespace -Class __NAMESPACE | ForEach-Object {
-    Write-Progress -Activity 'Getting all of the name spaces'
-    ($ns = '{0}\{1}' -f $_.__NAMESPACE,$_.Name)
-    Get-WmiNamespace $ns
+  try {
+    $Namespaces =  Get-WmiObject -Namespace $RootNamespace -Class __NAMESPACE  -ErrorAction Stop | ForEach-Object {
+      Write-Progress -Activity 'Getting all of the name spaces'
+      ($ns = '{0}\{1}' -f $_.__NAMESPACE,$_.Name)
+      Get-WmiNamespace $ns
+    }
   }
+  Catch {
+    Write-Warning "There was a issue communicating with the namespace "
+    break
+  }  
   if ($Classes -eq $false) {
     $RootNamespace
     $Namespaces
