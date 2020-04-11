@@ -1,7 +1,7 @@
 ﻿Class Dice {
   [int]$Faces
 
-  Dice ($DFaces) {
+  Dice ([int]$DFaces) {
     $this.Faces = $DFaces
   }
 
