@@ -6,16 +6,21 @@ Param(
   [int]$NumberofEqualSides
 )
 
-Class AreaOfShape {
-  [int]$NumberOfSides
-  [double]$LenghOfSide
-  [double]$TotalArea
+Class ShapeTool {
 
-  AreaOfShape([double]$Lengh,[int]$NumSides) {
-    $this.LenghOfSide = $Lengh
-    $this.NumberOfSides = $NumSides
-    $this.TotalArea = [math]::Pow($Lengh / 2,2) * [math]::Tan((180 - (360 / $NumSides)) /2 * [math]::PI/180) * $NumSides 
+  ShapeTool() { }
+  
+  [double]FindArea([double]$Lengh,[int]$NumSides) {
+    $TotalArea = [math]::Pow($Lengh / 2,2) * [math]::Tan((180 - (360 / $NumSides)) /2 * [math]::PI/180) * $NumSides 
+    return $TotalArea
+  }
+
+  [double]FindPerimeter([double]$Lengh,[int]$NumSides) {
+    $Perimeter = $Lengh * $NumSides
+    return $Perimeter
   }
 }
 
-[AreaOfShape]::New($SideLength,$NumberofEqualSides)
+$Shape = [ShapeTool]::New()
+$Shape.FindArea($SideLength,$NumberofEqualSides)
+$Shape.FindPerimeter($SideLength,$NumberofEqualSides)
