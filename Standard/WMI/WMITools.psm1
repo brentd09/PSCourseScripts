@@ -331,3 +331,13 @@ function Invoke-WMIExplorer {
   $FormWMIExplorer.ShowDialog()
 }
   
+function Get-AllWmiClassNames {
+  Param ($StartingNameSpace = 'root')
+  $NameSpaces = Get-CimInstance -Namespace $StartingNameSpace -ClassName "__Namespace" | 
+    Select-Object -Property *,@{n='FullNameSpacePath';e={$StartingNameSpace + '\' +$_.Name}}
+  foreach ($NameSpace in $NameSpaces) {
+    Get-CimClass -Namespace $NameSpace.FullNameSpacePath | Select-Object CimClassName,@{n='NameSpace';e={$NameSpace.FullNameSpacePath}}
+  }
+}
+
+Get-AllWmiClassNames | Where-Object {$_.cimclassname -match "temp"}
