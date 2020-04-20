@@ -2,6 +2,7 @@
   Functions in this module
   Get-WmiNamespace
   Invoke-WMIExplorer
+  Get-AllWmiClassNames
 #>
 
 function Get-WmiNamespace {
@@ -332,6 +333,28 @@ function Invoke-WMIExplorer {
 }
   
 function Get-AllWmiClassNames {
+    <#
+    .SYNOPSIS
+      This will get a list of all classnames that exist is all namespaces
+    .DESCRIPTION
+      This command collects all of the namespaces from root and then foreach of them
+      finds the classnames within each and displays both the classname information and
+      the namespace it came from
+    .PARAMETER StartingNameSpace
+      This parameter allows you to override the default root namespace as the starting point for 
+      the namespace and class search 
+    .EXAMPLE
+      Get-Get-AllWmiClassNames 
+      This will just show a list of namespaces located from the root
+    .EXAMPLE
+      Get-Get-AllWmiClassNames -StartingNameSpace root\CIMV2
+      This will show all namespacesand classes that exist under the root\CIMV2 namespace
+    .NOTES
+      General notes
+        Created By:  Brent Denny
+        Created On:  18 Apr 2020
+        Modified On: 20 Apr 2020 
+    #>
   Param ($StartingNameSpace = 'root')
   $NameSpaces = Get-CimInstance -Namespace $StartingNameSpace -ClassName "__Namespace" | 
     Select-Object -Property *,@{n='FullNameSpacePath';e={$StartingNameSpace + '\' +$_.Name}}
@@ -339,5 +362,3 @@ function Get-AllWmiClassNames {
     Get-CimClass -Namespace $NameSpace.FullNameSpacePath | Select-Object CimClassName,@{n='NameSpace';e={$NameSpace.FullNameSpacePath}}
   }
 }
-
-Get-AllWmiClassNames | Where-Object {$_.cimclassname -match "temp"}
