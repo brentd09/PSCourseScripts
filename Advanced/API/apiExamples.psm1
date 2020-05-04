@@ -46,7 +46,7 @@ function ConvertTo-LatLngCoords {
   Param(
     [parameter(Mandatory=$true)]
     [string[]]$Keyword,
-    [string[]]$APIKey = ((New-Object System.Management.Automation.PSCredential ('name',(Read-Host -AsSecureString ))).GetNetworkCredential().password)
+    [string[]]$APIKey = ((New-Object System.Management.Automation.PSCredential ('name',(Read-Host -Prompt "Enter API Key" -AsSecureString ))).GetNetworkCredential().password)
 
   )
   $resultAPI = Invoke-RestMethod -Method Get -Uri "http://open.mapquestapi.com/nominatim/v1/search.php?key=$APIKey&format=json&q=$Keyword" -UseBasicParsing
@@ -66,7 +66,7 @@ function ConvertTo-LatLngCoords {
 function Get-NewRandomADUsers {
   [CmdletBinding()]
   Param (
-    [string]$APIKey = ((New-Object System.Management.Automation.PSCredential ('name',(Read-Host -AsSecureString ))).GetNetworkCredential().password)
+    [string]$APIKey = ((New-Object System.Management.Automation.PSCredential ('name',(Read-Host -Prompt "Enter API Key" -AsSecureString ))).GetNetworkCredential().password)
   )
   $NewUsersCsv = Invoke-RestMethod -Method Get -Uri "https://my.api.mockaroo.com/random_ad_users.json?key=$APIKey" -UseBasicParsing
   $NewUsers = $NewUsersCsv | ConvertFrom-Csv
@@ -86,11 +86,51 @@ function Get-Weather {
     API and will retrieve the weather information. The temperatures are
     in Kelvin by default from the API and so this scripts converts these
     into Celsius.
+    The API returns the following:
+    Parameters:
+      coord
+        coord.lon City geo location, longitude
+        coord.lat City geo location, latitude
+      weather (more info Weather condition codes)
+        weather.id Weather condition id
+        weather.main Group of weather parameters (Rain, Snow, Extreme etc.)
+        weather.description Weather condition within the group. You can get the output in your language. Learn more
+        weather.icon Weather icon id
+      base Internal parameter
+      main
+        main.temp Temperature. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+        main.feels_like Temperature. This temperature parameter accounts for the human perception of weather. Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+        main.pressure Atmospheric pressure (on the sea level, if there is no sea_level or grnd_level data), hPa
+        main.humidity Humidity, %
+        main.temp_min Minimum temperature at the moment. This is minimal currently observed temperature (within large megalopolises and urban areas). Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+        main.temp_max Maximum temperature at the moment. This is maximal currently observed temperature (within large megalopolises and urban areas). Unit Default: Kelvin, Metric: Celsius, Imperial: Fahrenheit.
+        main.sea_level Atmospheric pressure on the sea level, hPa
+        main.grnd_level Atmospheric pressure on the ground level, hPa
+      wind
+        wind.speed Wind speed. Unit Default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
+        wind.deg Wind direction, degrees (meteorological)
+      clouds
+        clouds.all Cloudiness, %
+      rain
+        rain.1h Rain volume for the last 1 hour, mm
+        rain.3h Rain volume for the last 3 hours, mm
+      snow
+        snow.1h Snow volume for the last 1 hour, mm
+        snow.3h Snow volume for the last 3 hours, mm
+      dt Time of data calculation, unix, UTC
+      sys
+        sys.type Internal parameter
+        sys.id Internal parameter
+        sys.message Internal parameter
+        sys.country Country code (GB, JP etc.)
+        sys.sunrise Sunrise time, unix, UTC
+        sys.sunset Sunset time, unix, UTC
+      timezone Shift in seconds from UTC
+      id City ID
+      name City name
+      cod Internal parameter
   .PARAMETER City
     This is the city that weather infomation should be retrieved for
-  .PARAMETER TimezoneOffset
-    This is the number of hours that your time zone differs from UTC
-    for Melbourne, AU the value is 10 when not in DLS  
   .PARAMETER Key
     This is the API key to access the API, you can freely register 
     at openweathermap.org for a free API key
@@ -100,8 +140,7 @@ function Get-Weather {
   [cmdletbinding()]
   Param (
     [string]$City = 'Brisbane, AU',
-    [double]$TimezoneOffset = 10,
-    [string]$Key = ((New-Object System.Management.Automation.PSCredential ('DummyName',(Read-Host -AsSecureString ))).GetNetworkCredential().password)
+    [string]$Key = ((New-Object System.Management.Automation.PSCredential ('DummyName',(Read-Host -Prompt "Enter API Key" -AsSecureString ))).GetNetworkCredential().password)
   )
   # Sunrise and sunset employ a conversion technique to convert the UNIX UTC time code to PS DateTime obj 
   $URI = 'http://api.openweathermap.org/data/2.5/weather?q='+$City+'&appid='+$Key
@@ -110,8 +149,8 @@ function Get-Weather {
     @{n='CountryCode';e={$_.sys.Country}},
     @{n='Longatude';e={$_.coord.Lon}},
     @{n='Latitude';e={$_.coord.Lat}},
-    @{n='Sunrise';e={(((Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($_.sys.Sunrise))).AddHours($TimezoneOffset)).ToShortTimeString()}},
-    @{n='Sunset';e={(((Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($_.sys.Sunset))).AddHours($TimezoneOffset)).ToShortTimeString()}},
+    @{n='Sunrise';e={(((Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($_.sys.Sunrise))).AddHours($_.TimeZone/60/60)).ToShortTimeString()}},
+    @{n='Sunset';e={(((Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($_.sys.Sunset))).AddHours($_.TimeZone/60/60)).ToShortTimeString()}},
     @{n='WindDirection';e={$_.wind.Deg}},
     @{n='WindSpeed';e={$_.wind.speed}},
     @{n='TempCurrent';e={$_.main.temp - 273.15}},
