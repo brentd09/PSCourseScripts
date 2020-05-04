@@ -147,8 +147,8 @@ function Get-Weather {
   Invoke-RestMethod -Method Get -Uri $URI -UseBasicParsing |
   Select-Object -ExcludeProperty main -Property @{n='City';e={$_.Name}},    
     @{n='CountryCode';e={$_.sys.Country}},
-    @{n='Longatude';e={$_.coord.Lon}},
     @{n='Latitude';e={$_.coord.Lat}},
+    @{n='Longatude';e={$_.coord.Lon}},
     @{n='Sunrise';e={(((Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($_.sys.Sunrise))).AddHours($_.TimeZone/60/60)).ToShortTimeString()}},
     @{n='Sunset';e={(((Get-Date 01.01.1970)+([System.TimeSpan]::fromseconds($_.sys.Sunset))).AddHours($_.TimeZone/60/60)).ToShortTimeString()}},
     @{n='WindDirection';e={$_.wind.Deg}},
@@ -156,5 +156,7 @@ function Get-Weather {
     @{n='TempCurrent';e={$_.main.temp - 273.15}},
     @{n='TempFeelsLike';e={$_.main.feels_like - 273.15}},
     @{n='Pressure';e={$_.main.Pressure}},
-    @{n='Humidity';e={$_.main.humidity}}
+    @{n='Humidity';e={$_.main.humidity}},
+    @{n='WeatherCondition';e={$_.weather.main}},
+    @{n='WeatherDescription';e={$_.weather.description}}
 }
