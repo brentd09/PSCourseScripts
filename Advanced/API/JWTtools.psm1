@@ -7,16 +7,16 @@
      creates a JWT that will be valid for the number of
      seconds specified
   .EXAMPLE
-     New-JsonWebToken -Algorithm 'HS256' -Type 'JWT' -Issuer $api_key -SecretKey $api_secret -ValidforSeconds 30
+     New-JsonWebToken -Algorithm 'HS256' -Type 'JWT' -ApiKey $api_key -ApiSecret $api_secret -ValidforSeconds 30
      This creates a JWT with these attributes
   .PARAMETER Algorithm
      Specify the hashing algorithm required
      either "HS256", "HS384" or "HS512"
   .PARAMETER Type
      This will be the type of token in this case the one option is "JWT"
-  .PARAMETER Issuer
+  .PARAMETER ApiKey
      This refers to the the API key
-  .PARAMETER SecretKey
+  .PARAMETER ApiSecret
      This refers to the API Secret
   .PARAMETER ValidforSeconds
      This gives a time stamp to the code so that it cannot be reissued by someone else
@@ -34,10 +34,10 @@
     [string]$Type = "JWT",
     
     [Parameter(Mandatory=$True)]
-    [string]$Issuer,
+    [string]$ApiKey,
 
     [Parameter(Mandatory = $True)]
-    [string]$SecretKey,
+    [string]$ApiSecret,
 
         
     [int]$ValidforSeconds = 30
@@ -50,7 +50,7 @@
     typ = $Type
   }
   $Payload = @{
-    iss = $Issuer
+    iss = $ApiKey
     exp = $Expiration
   }
   $HeaderJson = $Header | ConvertTo-Json -Compress
@@ -63,13 +63,22 @@
     "HS384" {New-Object System.Security.Cryptography.HMACSHA384}
     "HS512" {New-Object System.Security.Cryptography.HMACSHA512}
   }
-  $SigningAlgorithm.Key = [System.Text.Encoding]::UTF8.GetBytes($SecretKey)
+  $SigningAlgorithm.Key = [System.Text.Encoding]::UTF8.GetBytes($ApiSecret)
   $Signature = [Convert]::ToBase64String($SigningAlgorithm.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($ToBeSigned))).Split('=')[0].Replace('+', '-').Replace('/', '_')
   $Token = "$HeaderJsonBase64.$PayloadJsonBase64.$Signature"
-  return $Token
+  $ValidUntil = (Get-Date).AddSeconds($ValidforSeconds)
+  $OutputHash = [ordered]@{
+     ApiKey = $ApiKey
+     TokenType = $Type
+     HashAlgorithm = $Algorithm
+     ValidUntil = $ValidUntil
+     Token = $Token
+  }
+  $ReturnObj = New-Object -TypeName psobject -Property $OutputHash
+  return $ReturnObj
 }
 
 $ApiKey = '1234'
 $ApiSecret = '1243'
 
-Generate-JWT -Algorithm 'HS256' -type 'JWT' -Issuer $ApiKey -SecretKey $ApiSecret -ValidforSeconds 30    
+New-JsonWebToken -Algorithm 'HS256' -Type 'JWT' -ApiKey $ApiKey -ApiSecret $ApiSecret -ValidforSeconds 30    
