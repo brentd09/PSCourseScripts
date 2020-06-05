@@ -7,7 +7,10 @@
      creates a JWT that will be valid for the number of
      seconds specified
   .EXAMPLE
-     New-JsonWebToken -Algorithm 'HS256' -Type 'JWT' -ApiKey $api_key -ApiSecret $api_secret -ValidforSeconds 30
+     $ApiKey = '1234'
+     $ApiSecret = '1243'
+     New-JsonWebToken -Algorithm 'HS256' -Type 'JWT' -ApiKey $ApiKey -ApiSecret $ApiSecret -ValidforSeconds 30   
+
      This creates a JWT with these attributes
   .PARAMETER Algorithm
      Specify the hashing algorithm required
@@ -76,9 +79,4 @@
   }
   $ReturnObj = New-Object -TypeName psobject -Property $OutputHash
   return $ReturnObj
-}
-
-$ApiKey = '1234'
-$ApiSecret = '1243'
-
-New-JsonWebToken -Algorithm 'HS256' -Type 'JWT' -ApiKey $ApiKey -ApiSecret $ApiSecret -ValidforSeconds 30    
+} 
