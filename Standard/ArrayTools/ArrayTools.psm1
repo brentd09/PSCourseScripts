@@ -29,10 +29,10 @@ function Compare-Array {
   $AB = $FirstArray | Where-Object {$_ -notin $SecondArray}
   $BA = $SecondArray | Where-Object {$_ -notin $FirstArray}
    
-  if     ($AB.count -eq 0 -and $BA.count -eq 0) {$Result = 0}
-  elseif ($AB.count -eq 0 -and $BA.count -ne 0) {$Result = 1}
-  elseif ($AB.count -ne 0 -and $BA.count -eq 0) {$Result = 2}
-  elseif ($AB.count -ne 0 -and $BA.count -ne 0) {$Result = 4}
+  if     ($AB.count -eq 0 -and $BA.count -eq 0) {$Result = 'Same'}
+  elseif ($AB.count -eq 0 -and $BA.count -ne 0) {$Result = 'FirstSubset'}
+  elseif ($AB.count -ne 0 -and $BA.count -eq 0) {$Result = 'SecondSubset'}
+  elseif ($AB.count -ne 0 -and $BA.count -ne 0) {$Result = 'NotSame'}
   $ObjProperties = [ordered]@{
     FirstArray = $FirstArray
     SecondArray = $SecondArray
