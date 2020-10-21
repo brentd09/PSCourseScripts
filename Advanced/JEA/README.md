@@ -77,7 +77,7 @@ Modules to Import<BR>
 <strong>visible cmdlets</strong> <BR>
 visible functions<BR>
 visible aliases<BR>
-Visible External Commands<BR>
+Visible External Commands **(Make sure you include the full path to the external command)* <BR>
 and more.<BR>     
 
 ## PSSessionConfigurationFile
