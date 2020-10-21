@@ -1,1 +1,0 @@
-﻿Configuration Script_test {  node lon-dc1 {    Script runscript {      GetScript = [string]'test'      SetScript = [string]{Start-Service BITS}      TestScript = [string]{$bits = Get-Service BITS;if ($bits.Status -eq 'stopped'){$false}else {$true}}    }  }}Script_testStart-DscConfiguration -Path .\Script_test -Wait -Verbose -Force

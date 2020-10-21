@@ -1,3 +1,6 @@
+# from https://www.youtube.com/watch?v=kvSbb6g0tMA where Drew Furgiuele hosts a fantastic video 
+# regarding muti threading with runspaces
+# This is almost an exact replica of the script he used in the video
 $Computers = @('lon-dc1','lon-svr1')
 
 $RunSpacePool = [runspacefactory]::CreateRunspacePool(1,4)
