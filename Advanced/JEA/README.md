@@ -77,7 +77,7 @@ Modules to Import<BR>
 <strong>visible cmdlets</strong> <BR>
 visible functions<BR>
 visible aliases<BR>
-Visible External Commands<BR>
+Visible External Commands **(Make sure you include the full path to the external command)** <BR>
 and more.<BR>     
 
 ## PSSessionConfigurationFile
@@ -127,7 +127,8 @@ If you edit the Role Capabilities file the person using the remote session to th
 Show the JEA Helper Tool v2
 
 ## JEA Permissions
-When using JEA ordinary users that have been givien the access to commands can use these commands as if they were administrators. For example a normal user 'BOB' if given the rights to use Set-ADUser can user that command to change user's details.<br>
+When using JEA ordinary users that have been givien the access through JEA to commands, can use these commands as if they were administrators. <BR>
+For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use that command to change user's details as if they were an administrator without needing to added  to the administrators group.<br>
 <strong>So be careful which commands someone is given</strong>
 
 <BR>
@@ -156,7 +157,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      *   Modules to Import
      *   <strong>VisibleCmdlets</strong>
      *   VisibleFunctions
-     *   Visible External Commands
+     *   Visible External Commands **(Make sure you include the full path to the external command)**
      *   Etc.
 3. <strong>LON-DC1</strong> - Create a JEA SessionConfig file:<BR>
      ```
