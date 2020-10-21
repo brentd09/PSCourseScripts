@@ -3,12 +3,12 @@ class Vehicle {
   [int]$NumberOfWheels
   [int]$NumberOfDoors
   [int]$YearOfCar
-  [string]$ModelOfCar
+  [string]$MakeOfCar
   [string]$Type
 
   Vehicle ($NumberDoors,$Year,$Model,$Class) {
     $this.NumberOfWheels = 4
-    $this.ModelOfCar = $Model
+    $this.MakeOfCar = $Model
     $this.NumberOfDoors = $NumberDoors
     $this.YearOfCar = $Year
     $this.Clasification = $Class
@@ -30,4 +30,4 @@ class Vehicle {
 $CarObj += [Vehicle]::New(4,1990,'Holden','CrossOver')
 $CarObj += [Vehicle]::New(4,1990,'Holden','Ute')
 
-$CarObj
+$CarObj | ft
