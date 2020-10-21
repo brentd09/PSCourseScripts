@@ -77,7 +77,7 @@ Modules to Import<BR>
 <strong>visible cmdlets</strong> <BR>
 visible functions<BR>
 visible aliases<BR>
-Visible External Commands **(Make sure you include the full path to the external command)* <BR>
+Visible External Commands **(Make sure you include the full path to the external command)** <BR>
 and more.<BR>     
 
 ## PSSessionConfigurationFile
@@ -156,7 +156,7 @@ When using JEA ordinary users that have been givien the access to commands can u
      *   Modules to Import
      *   <strong>VisibleCmdlets</strong>
      *   VisibleFunctions
-     *   Visible External Commands
+     *   Visible External Commands **(Make sure you include the full path to the external command)**
      *   Etc.
 3. <strong>LON-DC1</strong> - Create a JEA SessionConfig file:<BR>
      ```
