@@ -25,11 +25,9 @@ class Vehicle {
 }
 
 
-
-$CarObj = [Vehicle]::New(2,1990,'Holden','Car')
-$SUVObj = [Vehicle]::New(4,1990,'Holden','CrossOver')
-$UteObj = [Vehicle]::New(4,1990,'Holden','Ute')
+[vehicle[]]$CarObj = $null
+[vehicle[]]$CarObj += [Vehicle]::New(2,1990,'Holden','Car')
+$CarObj += [Vehicle]::New(4,1990,'Holden','CrossOver')
+$CarObj += [Vehicle]::New(4,1990,'Holden','Ute')
 
 $CarObj
-$SUVObj
-$UteObj
