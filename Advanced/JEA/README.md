@@ -128,7 +128,7 @@ Show the JEA Helper Tool v2
 
 ## JEA Permissions
 When using JEA ordinary users that have been givien the access through JEA to commands, can use these commands as if they were administrators. 
-For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use that command to change user's details as if they were an administrator without needing to add this user to the administrators group.<br>
+For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use that command to change user's details as if they were an administrator without needing to added  to the administrators group.<br>
 <strong>So be careful which commands someone is given</strong>
 
 <BR>
