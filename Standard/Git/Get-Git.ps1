@@ -5,3 +5,4 @@ $Gitexe = $latestlink -replace 'https.+\/',''
 $web = [System.Net.WebClient]::new()
 $web.DownloadFile($latestlink,$Gitexe)
 
+Invoke-Expression "$Gitexe /VERYSILENT /NORESTART"
