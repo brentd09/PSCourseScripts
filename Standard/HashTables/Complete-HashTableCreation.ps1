@@ -22,3 +22,13 @@ $HashTable3.Add('SubnetMask','255.255.255.0')
 $HashTable3.Add('DefaultGW','192.168.3.1')
 
 $HashTable3
+
+# Using HashTables to create Objects
+
+$HashTable4 = @{
+  Name = 'Harry'
+  Department = 'Sales'
+  DateStarted = [datetime]'4 Jan 1993'
+}
+$Employee = New-Object -TypeName psobject -Property $HashTable4
+$Employee
