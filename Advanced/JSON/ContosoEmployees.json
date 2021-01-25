@@ -1,0 +1,51 @@
+﻿$JSON = @"
+[
+  {
+    "id": 1,
+    "name": "Bret Graham",
+    "username": "BretG",
+    "email": "bretg@contoso.com",
+    "address": {
+      "street": "Hillard Street",
+      "number": "77",
+      "city": "Belfield",
+      "zipcode": "2191",
+      "Country": "Australia",
+      "geo": {
+        "lat": "-33.901425",
+        "lng": "151.084822"
+      }
+    },
+    "phone": "61395551234",
+    "website": "contoso.com",
+    "company": {
+      "name": "Contoso Intl.",
+      "catchPhrase": "manufacturing, sales, and support organization"
+    }
+  },
+  {
+    "id": 1,
+    "name": "Joe Dover",
+    "username": "JoeD",
+    "email": "joed@contoso.com",
+    "address": {
+      "street": "Gardiner Grove",
+      "number": "41",
+      "city": "Alderley",
+      "zipcode": "4051",
+      "Country": "Australia",
+      "geo": {
+        "lat": "-27.423390",
+        "lng": "152.997106"
+      }
+    },
+    "phone": "61795552345",
+    "website": "contoso.com",
+    "company": {
+      "name": "Contoso Intl.",
+      "catchPhrase": "manufacturing, sales, and support organization"
+    }
+  }
+]
+"@
+
