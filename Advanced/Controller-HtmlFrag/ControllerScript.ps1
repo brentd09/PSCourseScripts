@@ -7,6 +7,8 @@ do {
   Write-Host -ForegroundColor Yellow -NoNewline " 1. "
   Write-Host "Create a web report"
   Write-Host -ForegroundColor Yellow -NoNewline " 2. "
+  Write-Host "Open Chrome browser"
+  Write-Host -ForegroundColor Yellow -NoNewline " 9. "
   Write-Host "QUIT"
   Write-Host
   $Selection = Read-Host -Prompt "Enter a menu selection"
@@ -21,7 +23,10 @@ do {
           Write-Host "The report was written to $($SaveResult.path)"
           Read-Host "Press Enter to continue"
       }
-      2 { 
+      2 {
+          Start-Process "chrome.exe" "www.google.com"
+      }
+      9 { 
           "BYE"
       }
       Default {

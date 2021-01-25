@@ -62,7 +62,7 @@ function Merge-HtmlFragments {
 function Save-Html {
   Param (
   $HtmlDoc,
-  $Path = "$home\Documents\report.html"
+  $Path = "$home\Downloads\demo\report.html"
   )
   $HtmlDoc | Out-File $Path
   $objProp = @{Path = $Path}
