@@ -23,7 +23,7 @@ function ConvertFrom-UnixTimeStamp {
   $UnixTimeSpan = New-TimeSpan -Seconds $UnixTimeStamp 
   $UnixStartDate = [datetime]"1 jan 1970"
   $PSDateTimeObj = $UnixStartDate + $UnixTimeSpan
-  $ObjHash = @{
+  $ObjHash = [ordered]@{
     UnixTimeStamp = $UnixTimeStamp
     UnixTimeSpan  = $UnixTimeSpan
     PSDateTime    = $PSDateTimeObj
