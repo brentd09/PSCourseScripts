@@ -16,17 +16,24 @@ function ConvertFrom-UnixTimeStamp {
       Modified on: 24 Feb 2021
   #>
   Param (
-    [parameter(Mandatory=$true)]
-    [int]$UnixTimeStamp
+    [parameter(
+      Mandatory=$true,
+      ValueFromPipeline=$true,
+      ValueFromPipelineByPropertyName=$true
+    )]
+    [int]$TimeStamp
   )
-
-  $UnixTimeSpan = New-TimeSpan -Seconds $UnixTimeStamp 
-  $UnixStartDate = [datetime]"1 jan 1970"
-  $PSDateTimeObj = $UnixStartDate + $UnixTimeSpan
-  $ObjHash = [ordered]@{
-    UnixTimeStamp = $UnixTimeStamp
-    UnixTimeSpan  = $UnixTimeSpan
-    PSDateTime    = $PSDateTimeObj
+  begin {}
+  process {
+    $UnixTimeSpan = New-TimeSpan -Seconds $TimeStamp 
+    $UnixStartDate = [datetime]"1 jan 1970"
+    $PSDateTimeObj = $UnixStartDate + $UnixTimeSpan
+    $ObjHash = [ordered]@{
+      UnixTimeStamp = $TimeStamp
+      UnixTimeSpan  = $UnixTimeSpan
+      PSDateTime    = $PSDateTimeObj
+    }
+    New-Object -TypeName psobject -Property $ObjHash
   }
-  New-Object -TypeName psobject -Property $ObjHash
+  end {}
 }
