@@ -213,8 +213,9 @@ For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use 
      ```
 
 ### Raw Script
-```
+
 ## On LON-DC1
+```
 New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
 Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA
 New-Item -Type File -Path .\ -Name JEA.psm1
@@ -233,8 +234,9 @@ New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full
     RoleDefinitions = @{ 'ADATUM\BOB' = @{ RoleCapabilities = 'JEA_AD_mgmt' }}
 #>
 Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
-
+```
 ## On LON-CL1
+```
 # Switch to the LON-CL1 client VM 
 # Login as the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint
@@ -244,5 +246,6 @@ Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Newly Allowed Cmdlet} -Config
 # Try without JEA
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}
 # This will fail for a non admin user
+```
 
-FINISHED!
+# FINISHED!
