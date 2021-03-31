@@ -212,7 +212,7 @@ For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use 
      Get-PSSessionConfiguration -Name NameofEndpoint
      ```
 
-### Raw Script
+# Raw Script
 
 ## On LON-DC1
 ```
@@ -233,6 +233,7 @@ New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full
     # User roles (security groups), and the role capabilities that should be applied to them when applied to a session
     RoleDefinitions = @{ 'ADATUM\BOB' = @{ RoleCapabilities = 'JEA_AD_mgmt' }}
 #>
+# Make sure all the previous files are created and the edits are complete before running the next line
 Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
 ```
 ## On LON-CL1
@@ -240,12 +241,20 @@ Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
 # Switch to the LON-CL1 client VM 
 # Login as the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -ConfigurationName NameofEndpoint
+# Thsis will work
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint
+# This will fail
+```
+## On LON-DC1
+```
 # Change the .psrc file on LON-DC1 to include another cmdlet, then re-run the invoke-command
+```
+## On LON-CL1
+```
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Newly Allowed Cmdlet} -ConfigurationName NameofEndpoint
 # Try without JEA
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet}
 # This will fail for a non admin user
 ```
 
-# FINISHED!
+### FINISHED!
