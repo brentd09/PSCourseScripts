@@ -163,7 +163,7 @@ For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use 
      For Example: Edit the JEA_AD_mgmt.psrc file to allow access to the Get-ADUser and ADGroup commands, like this:
        # Cmdlets to make visible when applied to a session
        VisibleCmdlets = 'Get-ADUser','Get-ADGroup'
-     ```  <br>
+     ```
 3. <strong>LON-DC1</strong> - Create a JEA SessionConfig file:<BR>
      ```
      New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full 
@@ -178,7 +178,7 @@ For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use 
      For Example: Edit the JEA_AD_mgmt.pssc file to allow ADATUM\BOB access to the Get-ADUser and ADGroup commands, like this:
        # User roles (security groups), and the role capabilities that should be applied to them when applied to a session
        RoleDefinitions = @{ 'ADATUM\BOB' = @{ RoleCapabilities = 'JEA_AD_mgmt' }}
-     ```  <br>
+     ```
 
 4. <strong>LON-DC1</strong> - Register an endpoint on the target machine:<BR>
      ```
