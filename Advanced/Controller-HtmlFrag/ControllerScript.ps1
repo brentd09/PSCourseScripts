@@ -11,8 +11,7 @@ do {
   Write-Host "QUIT"
   Write-Host
   $Selection = Read-Host -Prompt "Enter a menu selection"
-  switch ($Selection)
-  {
+  switch ($Selection) {
     1 {
         $CSS = Get-CSS
         $Svc = Convert-ServiceToHtml
@@ -32,6 +31,6 @@ do {
       "Wrong selection try again"
       Start-Sleep -Seconds 3
     }
-  }
+  } # Switch
 } until ($Selection -eq 9)
 
