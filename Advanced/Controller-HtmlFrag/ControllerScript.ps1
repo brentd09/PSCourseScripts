@@ -1,7 +1,6 @@
 ﻿#REQUIRES -modules HTML_REPORT
 ### CONTROLLER SCRIPT ###
 do {
-  $BadChoice = $false
   Clear-Host
   Write-Host -BackgroundColor Yellow -ForegroundColor Black "TASK MENU"
   Write-Host -ForegroundColor Yellow -NoNewline " 1. "
@@ -31,7 +30,6 @@ do {
     }
     Default {
       "Wrong selection try again"
-      $BadChoice = $true
       Start-Sleep -Seconds 3
     }
   }
