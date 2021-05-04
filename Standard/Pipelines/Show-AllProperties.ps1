@@ -21,7 +21,7 @@ Param (
 Begin {}
 Process {
   foreach ($Object in $InputObject) {
-    
+    $Object | Get-Member
   }
 }
 End {}
