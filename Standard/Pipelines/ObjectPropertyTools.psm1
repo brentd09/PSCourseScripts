@@ -21,16 +21,29 @@ function Show-PropertyTree {
   )
  
   Begin {
-    $TypeNameArray = @()
-    $PropertyArray = @()
+    $Objects= @()
   }
   Process {
-    $PropMembers = $InputObject | Get-Member -MemberType Properties
-    $TypeName = $PropMembers.TypeName | Get-Unique
-    if ($TypeName -notin $TypeNameArray) {
-      $TypeNameArray += $TypeName
-      $PropertyArray += $PropMembers
-    }
-  }  
-  End {$TypeNameArray}
+    [array]$Objects += $InputObject
+      }  
+  End {
+    $Types = $Objects | Get-Member -MemberTyp Properties
+    $Types | Where-Object {$_.Name -notin @('PSChildName','PSDrive','PSIsContainer','PSParentPath','PSPath','PSProvider')} 
+    
+  }
+
+<#
+#This will replace the alias properties with the actual types and show the types for all other properties
+$PropTree = get-service |Show-PropertyTree 
+$PropTree | Select-Object -Property Name,@{n='test';e={
+  if ($_.membertype -ne 'AliasProperty') {($_.definition -split '\s+')[0]}
+  else{
+    $AliasName = ($_.definition -split '\s+')[-1]
+    $AliasDefinition = $PropTree | Where-Object {$_.Name -eq $AliasName} 
+    ($AliasDefinition.Definition -split '\s+')[0]
+  }}
+}
+#>
+
+
 }
