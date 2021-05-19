@@ -39,7 +39,7 @@ function Show-PropertyTree {
             (($AliasDefinition.Definition -split '\s+')[0]).TrimEnd('[]')
           }
         }
-      }
+      } | Select-Object -Property @{n='Property';e={$_.PropertyName +' ['+$_.Type+']'}}
 #    }  
   }
 }
