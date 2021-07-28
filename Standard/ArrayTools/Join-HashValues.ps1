@@ -33,13 +33,14 @@ Param(
     one=   'a'
     two=   'b'
     three= 'c'
-  } 
+  },
+  [switch]$IncludeOriginal 
 )
 
 $NewHash = [ordered]@{}
 $AllKeys = $HashTable.Keys
 foreach ($HashKey in $AllKeys) {
-  $NewHash.$HashKey += [array]$HashTable[$HashKey]
+  If ($IncludeOriginal -eq $true) {$NewHash.$HashKey += [array]$HashTable[$HashKey]}
   $OtherKeys = $AllKeys | Where-Object {$_ -notcontains $HashKey}
   foreach ($OtherKey in $OtherKeys) {
     $NewHash.$HashKey += [array](($HashTable[$HashKey, $OtherKey]) -join '')
