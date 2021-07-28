@@ -1,44 +1,48 @@
 ﻿<#
 .Synopsis
-   Takes other values in hash table and joins then to current value forming arrays
+  Takes other values in hash table and joins then to current value forming arrays
 .DESCRIPTION
-   This was in resonse to a question posed and using hash tables
-   to create arrays of values that are joined together where the 
-   current value is joined to each of the others and stored in an array.
+  This was in resonse to a question posed and using hash tables
+  to create arrays of values that are joined together where the 
+  current value is joined to each of the others and stored in an array.
+.PARAMETER HashTable
+  This is the hashtable that will be used to extract the values to pair up     
 .NOTES
-   General notes
-     Created By: Brent Denny
-     Created On: 28 Jul 2021
+  General notes
+    Created By: Brent Denny
+    Created On: 28 Jul 2021
 .EXAMPLE
-    Join-HashValues.ps1
-    This will take a hash table that looks like this:
-       Name                           Value                                                                                                  
-       ----                           -----                                                                                                  
-       one                            a                                                                                            
-       two                            b                                                                                            
-       three                          c     
-    
-    It will then produce a hash table that looks like this:
-       Name                           Value                                                                                                  
-       ----                           -----                                                                                                  
-       one                            {a, ab, ac}                                                                                            
-       two                            {b, ba, bc}                                                                                            
-       three                          {c, ca, cb}     
+  Join-HashValues.ps1
+  This will take a hash table that looks like this:
+      Name                           Value                                                                                                  
+      ----                           -----                                                                                                  
+      one                            a                                                                                            
+      two                            b                                                                                            
+      three                          c     
+   
+   It will then produce a hash table that looks like this:
+      Name                           Value                                                                                                  
+      ----                           -----                                                                                                  
+      one                            {a, ab, ac}                                                                                            
+      two                            {b, ba, bc}                                                                                            
+      three                          {c, ca, cb}     
 #>
 [CmdletBinding()]
-Param()
-$Hash = [ordered]@{
-  one=   'a'
-  two=   'b'
-  three= 'c'
-}
+Param(
+  $HashTable = [ordered]@{
+    one=   'a'
+    two=   'b'
+    three= 'c'
+  } 
+)
+
 $NewHash = [ordered]@{}
-$AllKeys = $Hash.Keys
+$AllKeys = $HashTable.Keys
 foreach ($HashKey in $AllKeys) {
-  $NewHash.$HashKey += [array]$Hash[$HashKey]
+  $NewHash.$HashKey += [array]$HashTable[$HashKey]
   $OtherKeys = $AllKeys | Where-Object {$_ -notcontains $HashKey}
   foreach ($OtherKey in $OtherKeys) {
-    $NewHash.$HashKey += [array](($Hash[$HashKey, $OtherKey]) -join '')
+    $NewHash.$HashKey += [array](($HashTable[$HashKey, $OtherKey]) -join '')
   }
 }
 $NewHash
