@@ -25,3 +25,15 @@ elseif ($A1A2.Count -eq 0 -and $A2A1.Count -ne 0) {'Array1 is a subset of Array2
 elseif ($A1A2.Count -ne 0 -and $A2A1.Count -eq 0) {'Array2 is a subset of Aarray1'}
 elseif ($A1A2.Count -ne 0 -and $A2A1.Count -ne 0) {'Array1 and Array2 are not equal or subsets of each other'}
 
+<#
+This is a simpler way if you just need to test for one array being a subset of another
+
+$a = 1,2,3,5,6,7,8,9
+
+$b = 2,3,4
+
+$c = 1,5,9
+
+if (($c | where {$_ -notin $a}).Count -eq 0) {$true}
+else {$false}
+#>
