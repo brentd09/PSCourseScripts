@@ -28,12 +28,12 @@ elseif ($A1A2.Count -ne 0 -and $A2A1.Count -ne 0) {'Array1 and Array2 are not eq
 <#
 This is a simpler way if you just need to test for one array being a subset of another
 
-$a = 1,2,3,5,6,7,8,9
+$Large = 1,2,3,5,6,7,8,9
 
-$b = 2,3,4
+$Small1 = 2,3,4
 
-$c = 1,5,9
+$Small2 = 1,5,9
 
-if (($c | where {$_ -notin $a}).Count -eq 0) {$true}
-else {$false}
+-not [bool]( $Small1 | Where-Object {$_ -notin $Large}).count
+-not [bool]( $Small2 | Where-Object {$_ -notin $Large}).count
 #>
