@@ -34,6 +34,6 @@ $Small1 = 2,3,4
 
 $Small2 = 1,5,9
 
--not [bool]( $Small1 | Where-Object {$_ -notin $Large}).count
--not [bool]( $Small2 | Where-Object {$_ -notin $Large}).count
+if (-not [bool]( $Small1 | Where-Object {$_ -notin $Large}).count) {"Its a subset"} else {"its not a subset"}
+if (-not [bool]( $Small2 | Where-Object {$_ -notin $Large}).count) {"Its a subset"} else {"its not a subset"}
 #>
