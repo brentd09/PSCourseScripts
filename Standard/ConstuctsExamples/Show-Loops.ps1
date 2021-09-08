@@ -1,69 +1,61 @@
-# While loops
-
-$Var = 10
-While ($Var -lt 50) {
-  $Var = $Var + 10
-  $Var
-}
-Write-Host "Finished while Loop - test condition performed before loop runs"
-
-$Var = 60
-While ($Var -lt 50) {
-  $Var = $Var + 10
-  $Var
-}
-Write-Host "Finished while Loop - test condition performed before loop runs"
-
-# Do While loops
-
-$Var = 10
-do {
-  $Var = $Var + 10
-  $Var
-} While ($Var -lt 50)
-Write-Host "Finished do while Loop - test condition performed after the loop"
-
-$Var = 60
-do {
-  $Var = $Var + 10
-  $Var
-} While ($Var -lt 50)
-Write-Host "Finished do while Loop - test condition performed after the loop"
-
-# Do Until loops
-
-$Var = 10
-do {
-  $Var = $Var + 10
-  $Var
-} Until ($Var -gt 50)
-Write-Host "Finished do until Loop - condition opposite to while loops"
-
-# foreach loop with a divide by zero issue
-
-$Numbers = 12,14,16,2,0,13,17
+$Numbers = 12,6,3,4,0,16,72
 foreach ($Number in $Numbers) {
-  $Answer = 144 / $Number
-  $Answer
+  $Result = 144 / $Number
+  "144 / $Number = $Result"
 }
-Write-Host "Finished foreach continue Loop - math errors apparent"
+Write-host -ForegroundColor Yellow 'End of foreach with errors'
 
-# foreach loop with continue
+$Numbers = 12,6,3,4,0,16,72
+foreach ($Number in $Numbers) {
+  if ($Number -ne 0) {
+    $Result = 144 / $Number
+    "144 / $Number = $Result"
+  }
+}
+Write-host -ForegroundColor Yellow 'End of foreach avoiding errors with if'
 
-$Numbers = 12,14,16,2,0,13,17
+$Numbers = 12,6,3,4,0,16,72
 foreach ($Number in $Numbers) {
   if ($Number -eq 0) {continue}
-  $Answer = 144 / $Number
-  $Answer
+  $Result = 144 / $Number
+  "144 / $Number = $Result"
 }
-Write-Host "Finished foreach continue Loop - skipping bad number"
+Write-host -ForegroundColor Yellow 'End of foreach avoiding errors with continue'
 
-# foreach loop with break
-
-$Numbers = 12,14,16,2,0,13,17
+$Numbers = 12,6,3,4,0,16,72
 foreach ($Number in $Numbers) {
   if ($Number -eq 0) {break}
-  $Answer = 144 / $Number
-  $Answer
+  $Result = 144 / $Number
+  "144 / $Number = $Result"
 }
-Write-Host "Finished foreach break Loop - when encountered bad number breaks out of loop"
+Write-host -ForegroundColor Yellow 'End of foreach avoiding errors with break'
+
+# While loops
+$TestNumber = 1
+while ($TestNumber -le 5) {
+  $TestNumber
+  $TestNumber = $TestNumber + 1
+}
+Write-host -ForegroundColor Yellow 'End of While loop - this may never execute the loop'
+
+$TestNumber = 6
+while ($TestNumber -le 5) {
+  $TestNumber
+  $TestNumber = $TestNumber + 1
+}
+Write-host -ForegroundColor Yellow 'End of While loop - this may never execute the loop'
+
+# Do loops
+$TestNumber = 1
+do {
+  $TestNumber
+  $TestNumber = $TestNumber + 1
+} while ($TestNumber -le 5)
+Write-host -ForegroundColor Yellow 'End of Do-While loop - this will always perform at least one loop'
+
+$TestNumber = 6
+do {
+  $TestNumber
+  $TestNumber = $TestNumber + 1
+} until ($TestNumber -gt 5)
+Write-host -ForegroundColor Yellow 'End of Do-Until loop - this will always perform at least one loop'
