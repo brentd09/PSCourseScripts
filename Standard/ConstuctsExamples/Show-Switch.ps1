@@ -4,10 +4,10 @@ Write-Host -ForegroundColor Yellow '2...Say goodbye'
 Write-Host -ForegroundColor Yellow '3...Say nothing'
 $Choice = Read-Host -Prompt 'Enter a menu choice'
 switch ($Choice) {
-  1 {'Hello'}
-  2 {'Good-bye'}
-  3 {'Nothing'}
-  Default {'You chose a number that was not valid'}
+  1 {Write-Host -ForegroundColor Yellow 'Hello'}
+  2 {Write-Host -ForegroundColor Yellow 'Good-bye'}
+  3 {Write-Host -ForegroundColor Yellow 'Nothing'}
+  Default {Write-Host -ForegroundColor Yellow 'You chose a number that was not valid'}
 }
 
 
@@ -15,8 +15,8 @@ $EmailAddress = Read-Host -Prompt 'Enter an email address'
 switch -wildcard ($EmailAddress) {
   'bob@*' {
     $MailBoxName = $EmailAddress.Substring(0,$EmailAddress.IndexOf('@'))
-    "Your mailbox name is $MailBoxName"
+    Write-Host -ForegroundColor Yellow "Your mailbox name is $MailBoxName"
   }
-  '*@adatum.com' {'You work for Adatum'}
-  Default {'You have an email I do not recognise'}
+  '*@adatum.com' {Write-Host -ForegroundColor Yellow 'You work for Adatum'}
+  Default {Write-Host -ForegroundColor Yellow 'You have an email I do not recognise'}
 }
