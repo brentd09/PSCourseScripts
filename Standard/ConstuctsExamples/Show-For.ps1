@@ -12,5 +12,6 @@ for ($i = 0; $i -le $PickNumersCount; $i++) {
 }
 $LottoNumbers
 
-# Lotto Numbers can be also done like this
-1..45 | Get-Random -Count 6
+# Lotto Numbers can be also done like this the easy way
+$LottoNumbers = 1..45 | Get-Random -Count 6
+$LottoNumbers
