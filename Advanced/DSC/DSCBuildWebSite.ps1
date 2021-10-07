@@ -14,6 +14,7 @@ Configuration BuildIIS {
       DestinationPath = 'c:\inetpub\wwwroot'
       SourcePath = 'C:\SiteData\default.htm'
       Type = 'File'
+      Force = $true
     }
   }
 }
