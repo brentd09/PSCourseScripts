@@ -10,7 +10,7 @@ Invoke-Command -ComputerName 'LON-SVR1' -ScriptBlock {
     </body>
     </html>
 "@
-  New-Item -Path c:\SiteData -ItemType Directory -Force
-  New-Item -Path C:\SiteData -ItemType File -Force -Value $content -Force
+  New-Item -Path C:\SiteData -ItemType Directory -Force
+  New-Item -Path C:\SiteData -Name 'default.html' -ItemType File -Force -Value $content 
   Remove-WindowsFeature -Name 'Web-Server' -IncludeManagementTools -Restart
 }

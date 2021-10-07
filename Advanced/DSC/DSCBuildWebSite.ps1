@@ -6,6 +6,13 @@ Configuration BuildIIS {
       Name = 'Web-Server'
       Ensure = 'Present'
     }
+
+    File WebSite {
+      DependsOn = '[WindowsFeature]IIS'
+      DestinationPath = 'c:\inetpub\wwwroot'
+      SourcePath = 'C:\SiteData\default.html'
+      Type = 'File'
+    }
   }
 }
 
