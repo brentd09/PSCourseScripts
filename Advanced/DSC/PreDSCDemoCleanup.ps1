@@ -1,3 +1,3 @@
-Invoke-Command -ComputerName LON-SVR1 -ScriptBlock {
-  Remove-WindowsFeature -Name web-server -IncludeManagementTools -Restart
+Invoke-Command -ComputerName 'LON-SVR1' -ScriptBlock {
+  Remove-WindowsFeature -Name 'Web-Server' -IncludeManagementTools -Restart
 }
