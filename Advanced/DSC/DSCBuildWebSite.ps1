@@ -6,13 +6,8 @@ Configuration BuildIIS {
       Name = 'Web-Server'
       Ensure = 'Present'
     }
-
-    WindowsFeature RSAT_IIS {
-      Name = 'Web-Mgmt-Console'
-      Ensure = 'Present'
-      DependsOn = 'IIS'
-    }
   }
 }
 
-BuildIIS 
+BuildIIS
+Start-DscConfiguration -Path .\BuildIIS -Wait -Verbose -Force
