@@ -226,7 +226,9 @@ New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc
   Edit the JEA_AD_mgmt.psrc file to allow access to the Get-ADUser and ADGroup commands, like this:
     # Cmdlets to make visible when applied to a session
     VisibleCmdlets = 'Get-ADUser','Get-ADGroup'
-#>    
+#> 
+```
+```     
 New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full 
 <#
   Edit the JEA_AD_mgmt.pssc file to allow ADATUM\BOB access to the Get-ADUser and ADGroup commands, like this:
