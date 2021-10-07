@@ -1,6 +1,8 @@
 Configuration BuildIIS {
   Param ([string]$ComputerName = 'LON-SVR1')
 
+  Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
+
   Node $ComputerName {
     WindowsFeature IIS {
       Name = 'Web-Server'
