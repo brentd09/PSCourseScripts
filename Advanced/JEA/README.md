@@ -214,7 +214,7 @@ For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use 
 
 # Raw Script
 
-## On LON-DC1
+## **On LON-DC1**
 ```
 New-Item -ItemType Directory -Force C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
 Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA
@@ -222,6 +222,8 @@ New-Item -Type File -Path .\ -Name JEA.psm1
 New-ModuleManifest -Path C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\JEA.psd1 -RootModule .\JEA.psm1
 Set-Location C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities
 New-PSRoleCapabilityfile -Path .\JEA_AD_mgmt.psrc
+```
+```     
 <#
   Edit the JEA_AD_mgmt.psrc file to allow access to the Get-ADUser and ADGroup commands, like this:
     # Cmdlets to make visible when applied to a session
@@ -238,7 +240,7 @@ New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full
 # Make sure all the previous files are created and the edits are complete before running the next line
 Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
 ```
-## On LON-CL1
+## **On LON-CL1**
 ```
 # Switch to the LON-CL1 client VM 
 # Login as the user listed in the .\JEA_AD_mgmt.pssc file, this user needs no special windows permissions
@@ -247,11 +249,11 @@ Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Allowed Cmdlet} -Configuratio
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Blocked Cmdlet} -ConfigurationName NameofEndpoint
 # This will fail
 ```
-## On LON-DC1
+## **On LON-DC1**
 ```
 # Change the .psrc file on LON-DC1 to include another cmdlet, then re-run the invoke-command
 ```
-## On LON-CL1
+## **On LON-CL1**
 ```
 Invoke-Command -ComputerName LON-DC1 -ScriptBlock {Newly Allowed Cmdlet} -ConfigurationName NameofEndpoint
 # Try without JEA
