@@ -12,7 +12,7 @@ Configuration BuildIIS {
     File WebSite {
       DependsOn = '[WindowsFeature]IIS'
       DestinationPath = 'c:\inetpub\wwwroot'
-      SourcePath = 'C:\SiteData\iisstart.htm'
+      SourcePath = 'C:\SiteData\default.htm'
       Type = 'File'
     }
   }
