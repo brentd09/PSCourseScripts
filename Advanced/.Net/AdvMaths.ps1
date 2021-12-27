@@ -9,3 +9,4 @@ $Number = 432134 / 45
 [System.Math]::Pow(2,3)
 
 [System.Math]::Max(23,65)
+
