@@ -1,19 +1,26 @@
+[cmdletBinding()]
+Param ([int]$MagazineCapacity = 17)
+
+# Class
 Class Glock {
   [string]$AmmoType
-  [int]$CartridgeCapacity
+  [int] hidden $CartridgeCapacity
   [int]$LiveBulletsInCartridge
   [string]$FireAttempt
+  [string]$Action
 
   Glock ($Capacity) {
     $this.AmmoType = '9mm'
     $this.CartridgeCapacity = $Capacity
     $this.LiveBulletsInCartridge = 0
     $this.FireAttempt = "NA"
+    $this.Action = 'New'
   }
 
   [Glock]Reload () {
     $this.LiveBulletsInCartridge = $this.CartridgeCapacity
     $this.FireAttempt = "NA"
+    $this.Action = 'Reload'
     return $this
   }
 
@@ -21,33 +28,35 @@ Class Glock {
     if ($this.LiveBulletsInCartridge -ge 1) {
       $this.LiveBulletsInCartridge = $this.LiveBulletsInCartridge - 1
       $this.FireAttempt = "BANG"
+      $this.Action = 'Fire'
       return $this
     }
     else {
       $this.FireAttempt = "CLICK"
+      $this.Action = 'Fire'
       return $this
     }
   }
 
   [Glock]Status () {
     $this.FireAttempt = "NA"
+    $this.Action = 'Status'
     return $this
   }
 
   [Glock]Unload () {
     $this.LiveBulletsInCartridge = 0
     $this.FireAttempt = "NA"
+    $this.Action = 'Unload'
     return $this
   }
 }
-do {
-  $MagCap = Read-Host -Prompt "What is the Capacity of the magazine 17 or 19 bullets"
-} until ($MagCap -in @('17','19'))
 
-$HandGun = [Glock]::New($MagCap -as [int])
+
+$HandGun = [Glock]::New($MagazineCapacity) 
 $HandGun.Status()
 $HandGun.Reload()
 $HandGun.Fire()
 $HandGun.Fire()
-$HandGun.Unload()
-$HandGun.Fire()
+$HandGun.Unload() 
+$HandGun.Fire() 
