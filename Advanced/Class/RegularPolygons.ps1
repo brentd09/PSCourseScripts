@@ -4,8 +4,14 @@ Class PolyGon {
   [int]$SideLength
   
   PolyGon ($NumberOfSides,$LengthOfSide) {
-    $this.SideLength = $LengthOfSide
-    $this.Sides = $NumberOfSides
+    if ($NumberOfSides -lt 3) {
+      Write-Warning "Not enough sides, must be at least three sides to be a polygon"
+      break
+    }
+    else {
+      $this.SideLength = $LengthOfSide
+      $this.Sides = $NumberOfSides
+    }
   }
   [double]Perimeter () {
     $Perim = $this.SideLength * $this.Sides
@@ -31,5 +37,5 @@ Class PolyGon {
 }
 
 
-$Poly = [PolyGon]::New(8,20)
+$Poly = [PolyGon]::New(3,20)
 $Poly
