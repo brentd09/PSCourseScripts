@@ -30,6 +30,11 @@ Class PolyGon {
     return $InnerAngles
   }
 
+  [double]ExtrudedVolume ([double]$Height) {
+    $Volume = $this.Area() * $Height
+    return $Volume
+  }
+
   [void]UpdateValues ($NumberOfSides,$LengthOfSide) {
     $this.SideLength = $LengthOfSide
     $this.Sides = $NumberOfSides
@@ -37,5 +42,5 @@ Class PolyGon {
 }
 
 
-$Poly = [PolyGon]::New(3,20)
+$Poly = [PolyGon]::New(4,10)
 $Poly
