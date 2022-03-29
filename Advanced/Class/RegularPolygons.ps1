@@ -7,7 +7,7 @@ Class PolyGon {
     $this.SideLength = $LengthOfSide
     $this.Sides = $NumberOfSides
   }
-  [int]Perimeter () {
+  [double]Perimeter () {
     $Perim = $this.SideLength * $this.Sides
     return $Perim
   }
@@ -16,6 +16,17 @@ Class PolyGon {
     $Apothem = $this.SideLength / 2 / [math]::Tan($MiddleAngle)
     $Area = $this.Sides * $this.SideLength * $Apothem / 2
     return $Area
+  }
+
+  [double]InteriorAngles () {
+    $CentreAngles = 360 / $this.Sides
+    $InnerAngles = 180 - $CentreAngles
+    return $InnerAngles
+  }
+
+  [void]UpdateValues ($NumberOfSides,$LengthOfSide) {
+    $this.SideLength = $LengthOfSide
+    $this.Sides = $NumberOfSides
   }
 }
 
