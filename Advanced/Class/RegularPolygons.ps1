@@ -1,6 +1,6 @@
 
 Class PolyGon {
-  [int]$Sides
+  hidden [int]$Sides
   [int]$SideLength
   
   PolyGon ($NumberOfSides,$LengthOfSide) {
@@ -35,10 +35,6 @@ Class PolyGon {
     return $Volume
   }
 
-  [void]UpdateValues ($NumberOfSides,$LengthOfSide) {
-    $this.SideLength = $LengthOfSide
-    $this.Sides = $NumberOfSides
-  }
 }
 
 
