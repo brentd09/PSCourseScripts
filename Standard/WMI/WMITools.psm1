@@ -118,14 +118,14 @@ function Invoke-WMIExplorer {
   }
   
   Function Connect-cimTarget{
-    If ($args[0] -eq $null) {
+    If ($args[0] -eq '') {
       $global:cimTarget = 'localhost'
     }
     Else {
       $global:cimTarget = $args[0]
     }
     If((Test-NetConnection -Port 5985 -ComputerName $cimTarget -InformationLevel Quiet) -or (Test-NetConnection -Port 5986 -ComputerName $cimTarget -InformationLevel Quiet)){
-      If($CIMSession -ne $Null){ 
+      If($CIMSession){ 
         Remove-CimSession $CIMSession -ErrorAction SilentlyContinue
         $Global:CIMSession = $null
       }         
@@ -146,7 +146,7 @@ function Invoke-WMIExplorer {
         }
       } 
       finally {
-        If($CIMSession -ne $Null){
+        If($CIMSession){
           $ListViewOutput.items.Clear()
           $labelActualTarget.ForeColor = "Green"
           $labelActualTarget.Text = "$($cimTarget) is connected"
@@ -304,7 +304,7 @@ function Invoke-WMIExplorer {
         $RowCounter++
         $ListViewItem = $null
         $ListViewItem = New-Object System.Windows.Forms.ListViewItem($ClassItem.Name)
-        If($ClassItem.Value -ne $Null){
+        If($ClassItem.Value){
           $ListviewItem.SubItems.Add("$($ClassItem.Value.GetType())") | Out-Null
           $ListviewItem.SubItems.Add($(Convert-TypesToString($ClassItem.Value))) | Out-Null
         }
@@ -316,7 +316,7 @@ function Invoke-WMIExplorer {
   
       $labelClassRefresh.Text = ''
       #Resize the columns if we have a successful set of items to display (avoids accidently squashing the columns)
-      If ($ClassDetails -ne $null) {
+      If ($ClassDetails) {
         $ListViewOutput.AutoResizeColumns(2)
         If ((($ListViewOutput.Columns[0..2].width) | Measure -Sum).Sum -lt 660) {
           $ListViewOutput.Columns[2].Width = (660 - (($ListViewOutput.Columns[0..1].width) | Measure -Sum).Sum)  
