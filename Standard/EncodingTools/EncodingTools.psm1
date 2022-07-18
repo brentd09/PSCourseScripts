@@ -21,8 +21,8 @@ function ConvertFrom-Base64 {
   $EncodingType = [System.Text.Encoding]::ASCII
   $ASCIIString = $EncodingType.GetString($Bytes)
   $ObjProp = [ordered]@{
-    Text = $ASCIIString
     Base64 = $Base64
+    Text = $ASCIIString
   }
   New-Object -TypeName psobject -Property $ObjProp
 }
