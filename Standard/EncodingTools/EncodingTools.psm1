@@ -1,4 +1,4 @@
-function Convertto-Base64 {
+function ConvertTo-Base64 {
   Param (
     [Parameter(Mandatory=$true)]
     [string]$TextToConvert
