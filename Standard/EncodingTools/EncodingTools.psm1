@@ -1,12 +1,12 @@
 function ConvertTo-Base64 {
   Param (
-    [Parameter(Mandatory=$true)]
-    [string]$TextToConvert
+    [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+    [string]$Text
   )
-  $Bytes = [System.Text.Encoding]::UTF8.GetBytes($TextToConvert)
+  $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Text)
   $Base64 = [System.Convert]::ToBase64String($Bytes)
   $ObjProp = [ordered]@{
-    Text = $TextToConvert
+    Text = $Text
     Base64 = $Base64
   }
   New-Object -TypeName psobject -Property $ObjProp
@@ -14,15 +14,15 @@ function ConvertTo-Base64 {
 
 function ConvertFrom-Base64 {
   Param (
-    [Parameter(Mandatory=$true)]
-    [string]$Base64String
+    [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+    [string]$Base64
   )
-  $Bytes = [System.Convert]::FromBase64String($Base64String)
+  $Bytes = [System.Convert]::FromBase64String($Base64)
   $EncodingType = [System.Text.Encoding]::ASCII
   $ASCIIString = $EncodingType.GetString($Bytes)
   $ObjProp = [ordered]@{
     Text = $ASCIIString
-    Base64 = $Base64String
+    Base64 = $Base64
   }
   New-Object -TypeName psobject -Property $ObjProp
 }
