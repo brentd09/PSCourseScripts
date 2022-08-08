@@ -1,16 +1,22 @@
 [CmdletBinding()]
 Param (
-  #[Parameter(Mandatory=$true)]
-  [String]$FirstCommand = 'Get-Service',
-  #[Parameter(Mandatory=$true)]
-  [String]$SecondCommand = 'Stop-Process'
+  [Parameter(Mandatory=$true)]
+  [String]$FirstCommand ,
+  [Parameter(Mandatory=$true)]
+  [String]$SecondCommand
 )
 function Get-ObjectType {
   Param (
     [string]$Command 
   )
-  $CmdObjTypes = ((Invoke-Expression $Command ) | ForEach-Object {$_.gettype()}).Name | Select-Object -Unique
-  return $CmdObjTypes
+  try {
+    $CmdObjTypes = ((Invoke-Expression $Command -ErrorAction stop) | ForEach-Object {$_.gettype()}).Name | Select-Object -Unique
+    return $CmdObjTypes
+  }
+  catch {
+    Write-Warning "$FirstCommand - does not appear to be a valid command"
+    break
+  }  
 }
 function Get-ObjectProperty {
   Param (
@@ -36,7 +42,15 @@ function Get-ObjectMember {
     [ValidateSet('ByValue','ByPropertyName')]
     [string]$PipelineMethod
   )
-  $CmdHelp = Get-help -Full -Name $Command
+  $CmdHelp = try {
+    $AllCommands = Get-Command 
+    if ($AllCommands.Name -notcontains $SecondCmd) {throw "No such command"}
+    Get-help -Full -Name $Command -ErrorAction stop
+  }
+  catch {
+    Write-Warning "There does not seem to be a help topic the the command $SecondCommand`nThis command requires PowerShell help pages for the second command"
+    break
+  }
   $PipelineParams = foreach ($Parameter in $CmdHelp.parameters.parameter) {
     if ($Parameter.PipelineInput -match $PipelineMethod) {
       $ByPNProps = [ordered]@{
@@ -78,7 +92,7 @@ function Show-ByVal {
   Write-Host 
   Write-Host -ForegroundColor Blue "FOR EXAMPLE"
   Write-Host -ForegroundColor Blue "-----------"
-  Write-Host "$FirstCmd --> $FirstCmdType (Object)" -NoNewline
+  Write-Host "$FirstCmd --> (Object)[$FirstCmdType] " -NoNewline
   Write-Host -ForegroundColor Green "  =====>> | =====>>  " -NoNewline
   Write-Host "-$($SecondCmdParamByVal[0].Name)[$($SecondCmdParamByVal[0].Type)] --> $SecondCmd"
   Write-Host
@@ -112,11 +126,33 @@ function Show-ByPropertyName {
   Write-Host -ForegroundColor Blue "ByPropertyName" -NoNewline
   Write-Host " in which property values "
   Write-Host "from the first command are pipelined into the parameters of the second command"
-  Write-Host "if they are both spelt the same and both have the same data types"
+  Write-Host "on the condition that they are both spelt the same and both have the same data types"
   Write-Host 
   Write-Host -ForegroundColor Blue "FOR EXAMPLE"
   Write-Host -ForegroundColor Blue "-----------"
-
+  '{0,-50}{1,13}{2,23}{3,-50}' -f "First Command","","","Second Command"
+  '{0,-50}{1,13}{2,23}{3,-50}' -f "-------------","","","--------------"
+  '{0,-50}{1,13}{2,23}{3,-50}' -f $FirstCmd,"","",$SecondCmd
+  Write-Host
+  '{0,-50}{1,13}{2,23}{3,-50}' -f "Properties","","","Matching Parameters"
+  '{0,-50}{1,13}{2,23}{3,-50}' -f "----------","","","-------------------"
+  $MatchingPropsToParams = @() 
+  foreach ($FirstCmdProp in $FirstCmdProperties) {
+    if ($FirstCmdProp.Name -in $SecondCmdParamByPN.Name) {
+      $MatchingParam  = $SecondCmdParamsByPN | Where-Object {$_.Name -eq $FirstCmdProp.Name}
+      if ($FirstCmdProp.Type -eq $MatchingParam.Type) {
+        $MatchingPropsToParams += "$($FirstCmdProp.Name)[$($FirstCmdProp.Type)],=====>|=====>,             ,$($MatchingParam.Name)[$($MatchingParam.Type)]"
+      }
+    }
+  }
+  If ($MatchingPropsToParams.Count -gt 0) {
+    foreach ($MatchingPropToParam in $MatchingPropsToParams) {
+      '{0,-50}{1,13}{2,23}{3,-50}' -f $MatchingPropToParam.split(',')
+    }
+  }
+  else {
+    Write-Host "There are no matches, so that means that pipelining ByValue or ByPropertName is not possible"
+  }
 }
 
 # MAIN CODE
@@ -136,5 +172,12 @@ else {
 # If not, lets see of ByPropertyName will work
 $FirstCmdOutputProperties = Get-ObjectProperty -Command $FirstCommand 
 $SecondCmdParamByPN = Get-ObjectMember -Command $SecondCommand -PipelineMethod ByPropertyName
-Show-ByPropertyName -FirstCmd $FirstCommand $SecondCommand -FirstCmdType $FirstCmdOutputType -FirstCmdProperties $FirstCmdOutputProperties -SecondCmdParamsByPN $SecondCmdParamByPN
+$ShowPNSplat = @{
+  FirstCmd            = $FirstCommand 
+  SecondCmd           = $SecondCommand
+  FirstCmdType        = $FirstCmdOutputType 
+  FirstCmdProperties  = $FirstCmdOutputProperties 
+  SecondCmdParamsByPN = $SecondCmdParamByPN
+}
+Show-ByPropertyName @ShowPNSplat
 }
