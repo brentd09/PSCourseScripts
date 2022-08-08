@@ -22,7 +22,7 @@ function Get-PipelineMethod {
     FirstCommand to the SecondCommand
   .PARAMETER FirstCommand
     This represents the first command in a pipeline
-  .PARAMETER FirstCommand
+  .PARAMETER SecondCommand
     This represents the second command in a pipeline
   .NOTES
     Created
@@ -36,6 +36,8 @@ function Get-PipelineMethod {
     Version         Changes made
     0.9             Final edits to get the ByPropertyName result working, there is still an issue with the ByValue output if the 
                     first command outputs multiple objects, I have not resolved this problem yet
+    0.95            Fixed a problem that was declaring a real command as one that did not exist         
+    0.98            Fixed the Help content       
   .EXAMPLE
     Get-PipelineMethod -FirstCommand Get-Service -SecondCommand Stop-Service
     If you are trying to determine how: 
@@ -89,8 +91,8 @@ function Get-PipelineMethod {
       [string]$PipelineMethod
     )
     $CmdHelp = try {
-      $AllCommands = Get-Command 
-      if ($AllCommands.Name -notcontains $SecondCmd) {throw "No such command"}
+      $AllCommands = (Get-Command).Name 
+      if ($AllCommands -notcontains $Command) {throw "No such command"}
       Get-help -Full -Name $Command -ErrorAction stop
     }
     catch {
