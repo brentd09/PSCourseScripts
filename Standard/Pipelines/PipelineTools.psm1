@@ -119,8 +119,8 @@ function Get-PipelineMethod {
       $SecondCmdParamByVal
     )
     Clear-Host
-    Write-Host -ForegroundColor Blue "ByValue Pipeline"
-    Write-Host -ForegroundColor Blue "----------------"
+    Write-Host -ForegroundColor Cyan "ByValue Pipeline"
+    Write-Host -ForegroundColor Cyan "----------------"
     Write-Host "The first command " -NoNewline
     Write-Host -ForegroundColor Red $FirstCmd  -NoNewline
     Write-Host " produces an object of type " -NoNewline
@@ -131,15 +131,15 @@ function Get-PipelineMethod {
     Write-Host -ForegroundColor Red $FirstCmdType -NoNewline
     Write-Host " objects " 
     Write-Host "being pipelined " -NoNewline
-    Write-Host -ForegroundColor Blue "ByValue" -NoNewline
+    Write-Host -ForegroundColor Cyan "ByValue" -NoNewline
     Write-Host " via the parameter -" -NoNewline
     Write-Host -ForegroundColor Red $SecondCmdParamByVal[0].Name
     if ($SecondCmdParamByVal[0].Type -eq 'PSObject') {
       Write-Host "`nPSObject is a special case in which PSObject will accept any object" 
     }
     Write-Host 
-    Write-Host -ForegroundColor Blue "FOR EXAMPLE"
-    Write-Host -ForegroundColor Blue "-----------"
+    Write-Host -ForegroundColor Cyan "FOR EXAMPLE"
+    Write-Host -ForegroundColor Cyan "-----------"
     Write-Host "$FirstCmd --> (Object)[$FirstCmdType] " -NoNewline
     Write-Host -ForegroundColor Green "  =====>> | =====>>  " -NoNewline
     Write-Host "-$($SecondCmdParamByVal[0].Name)[$($SecondCmdParamByVal[0].Type)] --> $SecondCmd"
@@ -155,8 +155,8 @@ function Get-PipelineMethod {
       $SecondCmdParamsByPN
     )
     Clear-Host
-    Write-Host -ForegroundColor Blue "ByPropertName Pipeline"
-    Write-Host -ForegroundColor Blue "----------------------"
+    Write-Host -ForegroundColor Cyan "ByPropertName Pipeline"
+    Write-Host -ForegroundColor Cyan "----------------------"
     Write-Host "The first command " -NoNewline
     Write-Host -ForegroundColor Red $FirstCmd  -NoNewline
     Write-Host " produces an object of type " -NoNewline
@@ -167,17 +167,17 @@ function Get-PipelineMethod {
     Write-Host -ForegroundColor Red $FirstCmdType -NoNewline
     Write-Host " objects "
     Write-Host "to be pipelined " -NoNewline
-    Write-Host -ForegroundColor Blue "ByValue" -NoNewline
+    Write-Host -ForegroundColor Cyan "ByValue" -NoNewline
     Write-Host " via any of the parameters" 
     Write-Host
     Write-Host "Therefore the pipeline now tries to pipe " -NoNewline
-    Write-Host -ForegroundColor Blue "ByPropertyName" -NoNewline
+    Write-Host -ForegroundColor Cyan "ByPropertyName" -NoNewline
     Write-Host " in which property values "
     Write-Host "from the first command are pipelined into the parameters of the second command"
     Write-Host "on the condition that they are both spelt the same and both have the same data types"
     Write-Host 
-    Write-Host -ForegroundColor Blue "FOR EXAMPLE"
-    Write-Host -ForegroundColor Blue "-----------"
+    Write-Host -ForegroundColor Cyan "FOR EXAMPLE"
+    Write-Host -ForegroundColor Cyan "-----------"
     '{0,-50}{1,13}{2,23}{3,-50}' -f "First Command","","","Second Command"
     '{0,-50}{1,13}{2,23}{3,-50}' -f "-------------","","","--------------"
     '{0,-50}{1,13}{2,23}{3,-50}' -f $FirstCmd,"","",$SecondCmd
