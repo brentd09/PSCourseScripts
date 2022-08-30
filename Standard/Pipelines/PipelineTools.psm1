@@ -135,7 +135,7 @@ function Get-PipelineMethod {
     Write-Host " via the parameter -" -NoNewline
     Write-Host -ForegroundColor Red $SecondCmdParamByVal[0].Name
     if ($SecondCmdParamByVal[0].Type -eq 'PSObject') {
-      Write-Host "`nPSObject is a special case in which PSObject will accept any object" 
+      Write-Host -ForegroundColor Yellow "`nPSObject is a special case in which PSObject will accept any object" 
     }
     Write-Host 
     Write-Host -ForegroundColor Cyan "FOR EXAMPLE"
