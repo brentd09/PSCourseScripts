@@ -178,12 +178,12 @@ function Get-PipelineMethod {
     Write-Host 
     Write-Host -ForegroundColor Cyan "FOR EXAMPLE"
     Write-Host -ForegroundColor Cyan "-----------"
-    '{0,-50}{1,13}{2,23}{3,-50}' -f "First Command","","","Second Command"
-    '{0,-50}{1,13}{2,23}{3,-50}' -f "-------------","","","--------------"
-    '{0,-50}{1,13}{2,23}{3,-50}' -f $FirstCmd,"","",$SecondCmd
+    '{0,-30}{1,13}{2,13}{3,-30}' -f "First Command","","","Second Command"
+    '{0,-30}{1,13}{2,13}{3,-30}' -f "-------------","","","--------------"
+    '{0,-30}{1,13}{2,13}{3,-30}' -f $FirstCmd,"","",$SecondCmd
     Write-Host
-    '{0,-50}{1,13}{2,23}{3,-50}' -f "Properties","","","Matching Parameters"
-    '{0,-50}{1,13}{2,23}{3,-50}' -f "----------","","","-------------------"
+    '{0,-30}{1,13}{2,13}{3,-30}' -f "Properties","","","Matching Parameters"
+    '{0,-30}{1,13}{2,13}{3,-30}' -f "----------","","","-------------------"
     $MatchingPropsToParams = @() 
     foreach ($FirstCmdProp in $FirstCmdProperties) {
       if ($FirstCmdProp.Name -in $SecondCmdParamByPN.Name) {
@@ -195,7 +195,7 @@ function Get-PipelineMethod {
     }
     If ($MatchingPropsToParams.Count -gt 0) {
       foreach ($MatchingPropToParam in $MatchingPropsToParams) {
-        '{0,-50}{1,13}{2,23}{3,-50}' -f $MatchingPropToParam.split(',')
+        '{0,-30}{1,13}{2,13}{3,-30}' -f $MatchingPropToParam.split(',')
       }
     }
     else {
