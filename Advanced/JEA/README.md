@@ -182,7 +182,7 @@ For example a normal user 'BOB' (if given the rights to use Set-ADUser) can use 
 
 4. <strong>LON-DC1</strong> - Register an endpoint on the target machine:<BR>
      ```
-     Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
+     Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc -RunAsCredential 'Adatum\Administrator'
      #Only the PSSessionConfigurationFile path is required, as it locates the .psrc files automatically
      ```
 5. <strong>LON-CL1</strong> - Test JEA:<BR>
@@ -238,7 +238,7 @@ New-PSSessionConfigurationFile -Path .\JEA_AD_mgmt.pssc -Full
     RoleDefinitions = @{ 'ADATUM\BOB' = @{ RoleCapabilities = 'JEA_AD_mgmt' }}
 #>
 # Make sure all the previous files are created and the edits are complete before running the next line
-Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc
+Register-PSSessionConfiguration -Name NameofEndpoint -Path .\JEA_AD_mgmt.pssc -RunAsCredential 'Adatum\Administrator'
 ```
 ## **On LON-CL1**
 ```
