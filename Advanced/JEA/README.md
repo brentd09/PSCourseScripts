@@ -52,12 +52,12 @@ Member server or workstation |	Local groups C and D |	Local user, member of 'COM
 Create the following, (on the target machine):
 <strong>C:\Windows\system32\WindowsPowerShell\v1.0\Modules\JEA\RoleCapabilities</strong>  
 Populate the JEA folder with a JEA.psm1 file containing the functions that JEA connections will use.<BR>
-Next you will need to create a module manifest file using: <br>
+Next, you will need to create a module manifest file using: <br>
 <strong>New-ModuleManifest -Path {ModulePath}\JEA.psd1 -RootModule {ModulePath}\JEA.psm1</strong><BR>
-Also populate the <strong>RoleCapabilities</strong> sub-directory with all of the <strong>.psrc</strong> files for this target, this keeps 
-the files centrally managed and makes the modules and RoleCapabilities auto discoverable.
+Also, populate the <strong>RoleCapabilities</strong> sub-directory with all of the <strong>.psrc</strong> files for this target, this keeps 
+the files centrally managed and makes the modules and RoleCapabilities auto-discoverable.
 
-The PSCapabilityFile dictates the folowing:<BR>
+The PSCapabilityFile dictates the following:<BR>
 Modules to Import<BR>
 <strong>visible cmdlets</strong> <BR>
 visible functions<BR>
@@ -94,27 +94,29 @@ The PSSessionConfigurationFile will dictate the following:<BR>
      
 Setting|Description     
 ---|---    
-RoleDefinitions | Which users/groups get which autolocated RoleCapabilityFile.
-SessionType | Default or RestrictedRemote (later is preffered as it restricts as default)
+RoleDefinitions | Which users/groups get which auto-located RoleCapabilityFile.
+SessionType | Default or RestrictedRemote (later is preferred as it restricts as default)
 TransscriptDirectory | Where to dump the transcript files
-RunAsVirtualAccount | Create a onetime/PSSession local user linked to your account so that accidents are contained to that machine only
+RunAsVirtualAccount | Create a one-time/PSSession local user linked to your account so that accidents are contained to that machine only
 ExecutionPolicy | Policy applied to the session 
 etc|
 <BR>     
 
 ## Register an EndPoint
-With these two files on a target server you can now register an EndPoint using:<BR>
+With these two files on a target server, you can now register an EndPoint using:<BR>
 _(Assuming you are in the folder where the pssc file exists)_     
-<strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\PSSessionConfigFile.pssc -force</strong><BR>
-In the process of registering the endpoint the SessionconfiguartionFile will autolocate the 
+<strong>Register-PSSessionConfiguration -Name NameofEndpoint -Path .\PSSessionConfigFile.pssc -force  -RunAsCredential 'Adatum\Administrator'</strong><BR>
+In the process of registering the endpoint, the SessionconfiguartionFile will auto-locate the 
 PSRoleCapabilityFile that was saved in the RoleCapabilities folder in a Module directory under a 
-Modules directory (This is how it is auto located).
+Modules directory (This is how it is auto-located). 
+The Registration sets the 'Adatum\Administrator' as the account the JEA sessions run as, if 
+the  -RunAsCredential parameter is not used the session uses the authentication of the connecting user.
      
 ## Connecting to the EndPoint
 When a user wishes to connect to the JEA EndPoint they will use one of the following:
 * Invoke-Command -ComputerName ServerName -ConfigurationName NameOfEndPoint -scriptblock {<Allowed commands>}
 * Enter-PSSession -ComputerName ServerName -ConfigurationName NameOfEndPoint
-_The Enter-PSSession may not be allowed as the restrictions on the endpoint may be so tight that a full session may be not possible_     
+_The Enter-PSSession may not be allowed as the restrictions on the endpoint may be so tight that a full session may not be possible_     
 
 <BR><BR>
 
