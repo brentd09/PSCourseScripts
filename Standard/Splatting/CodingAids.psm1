@@ -17,9 +17,10 @@ function New-SplattingTable {
 
     Change Log
     ----------
-    Who                  When          What
-    -------------------  -----------   ------------------------------------------
-    Brent Denny          05-Jun-2024   Just completed the module
+    Who                   When          What
+    -------------------   -----------   ------------------------------------------
+    Brent Denny           05-Jun-2024   Just completed the module
+    Brent Denny           05-Jun-2024   Fixed an issue where blank spaces after the command entered would invalidate command, also added the SplatTable variable
 
   .EXAMPLE
     New-SplattingTable -CommandName 'Get-Service'
@@ -38,16 +39,18 @@ function New-SplattingTable {
     [switch]$ShowSplat
   )
   # Get the command
-  try {$command = Get-Command -Name $CommandName -ErrorAction stop}
+  $CommandName = $CommandName.Trim()
+  try {$CommandInfo = Get-Command -Name $CommandName -ErrorAction stop}
   catch {Write-Warning "$CommandName is not a valid command";break}
   
   # Create the start of the hash table
-  $SplattingTable = "@{`n"
+  $SplattingTable = "`$SplatTable = @{`n"
   
   # Populate the hash table with parameters
-  $command.Parameters.Keys | ForEach-Object {
+  $CommandInfo.Parameters.Keys | ForEach-Object {
     # Exclude common parameters
-    if ($command.Parameters[$_].ParameterType.Name -ne "SwitchParameter" -and $_ -notin [System.Management.Automation.Cmdlet]::CommonParameters) {
+    if ($CommandInfo.Parameters[$_].ParameterType.Name -ne "SwitchParameter" -and 
+        $_ -notin [System.Management.Automation.Cmdlet]::CommonParameters) {
       $SplattingTable = $SplattingTable + "  $_" + " = ''`n"
     }
   }
