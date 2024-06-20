@@ -1,3 +1,89 @@
+function Get-ObjectProperty {
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory=$true)]
+    [string]$CmdletName
+  )
+  try {$GivenCommand = Get-Command $CmdletName -ErrorAction Stop }
+  catch {Write-Warning "$CmdletName, is not a command I recognise";break}
+  $CmdletName = $GivenCommand.Name
+  $GetMemberInfo = Invoke-Expression -Command $CmdletName 2> $null | Get-Member 
+  $ObjMemberInfo = $GetMemberInfo | Where-Object {$_.MemberType -Like '*property*'} | 
+    Select-Object -Property Name,MemberType,@{n='Type';e={
+      if ($_.Membertype -eq 'AliasProperty') {
+        $AliasName = ($_.Definition -split '\s')[-1]
+        $RealProp = $GetMemberInfo | Where-Object {$_.Name -eq $AliasName}
+        ($RealProp.Definition -split '\s')[0] -replace '\[\]',''
+      }
+      else {($_.Definition -split '\s')[0] -replace '\[\]',''}
+    }} | Select-Object -Property Name,Type
+  return $ObjMemberInfo  
+}
+
+function Get-ObjectType {
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory=$true)]
+    [string]$CmdletName
+  )
+  try {$GivenCommand = Get-Command $CmdletName -ErrorAction Stop }
+  catch {Write-Warning "$CmdletName, is not a command I recognise";break}
+  $CmdletName = $GivenCommand.Name  
+  $TypeName = (Invoke-Expression -Command $CmdletName 2> $null)[0].GetType().Name
+  return $TypeName
+}
+
+function Get-PipelineParameter {
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory=$true)]
+    [string]$CmdletName
+  )
+  try {$GivenCommand = Get-Command $CmdletName -ErrorAction Stop }
+  catch {Write-Warning "$CmdletName, is not a command I recognise";break}
+  $CmdletName = $GivenCommand.Name  
+  $HelpInfo = Get-Help -Full $CmdletName
+  $ParamList = $HelpInfo.Parameters.parameter | 
+    Where-Object {$_.PipelineInput -like 'True*'} | 
+    Select-Object -Property Name,@{n='Type';e={(($_.Type.Name -split '\.')[-1] -split '\[')[0]}},pipelineinput
+  return $ParamList
+}
+
+
+
+function Find-PipelineMethod {
+  [CmdletBinding()]
+  Param (
+    [Parameter(Mandatory=$true)]
+    [string]$FirstCmdLet,
+    [Parameter(Mandatory=$true)]
+    [string]$SecondCmdLet
+  )
+  try {$GivenCommand1 = Get-Command $FirstCmdLet -ErrorAction Stop }
+  catch {Write-Warning "$FirstCmdLet, is not a command I recognise";break}
+  try {$GivenCommand2 = Get-Command $SecondCmdLet -ErrorAction Stop }
+  catch {Write-Warning "$SecondCmdLet, is not a command I recognise";break}
+  $FirstCmdLet = $GivenCommand1.Name  
+  $SecondCmdLet = $GivenCommand2.Name  
+
+  # Test to see if ByValue Pipeline is possible
+  $ObjType = Get-ObjectType -CmdLetName $FirstCmdLet
+  $ObjProps = Get-ObjectProperty -CmdLetName $FirstCmdLet
+  $ParamInfo = Get-PipelineParameter -CmdLetName $SecondCmdLet
+  $ByValParam = $ParamInfo | Where-Object {$_.Type -contains $ObjType -and $_.PipelineInput -match 'ByValue'}
+  If ($ByValParam.Count -gt 0) {
+    Write-Host 'ByValue is possible'
+    Write-Host ""
+    Write-Host "$FirstCmdLet | $SecondCmdLet"
+    "{0,20}{1,10}{2,50}" -f  "$FirstCmdLet","", "$ObjType"
+    "{0,20}{1,10}{2,50}" -f  "$SecondCmdLet","$ObjType","$($ByValParam | Out-String)[1]"
+  }
+  else {
+    $ByPNMatches =$ObjProps | Where-Object {$ParamInfo.Name -eq $_.Name -and $ParamInfo.Type -match $_.Type}
+    if ($ByPNMatches.Count -gt 0) {Write-Host 'ByProprtyName is possible'}
+  }
+}
+
 function Get-PipelineMethod {
   <#
   .SYNOPSIS
