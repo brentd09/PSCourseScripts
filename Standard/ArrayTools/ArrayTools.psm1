@@ -135,3 +135,36 @@ function Test-TwoArray {
   elseif ($A1A2.Count -ne 0 -and $A2A1.Count -eq 0) {'Array2 is a subset of Aarray1'}
   elseif ($A1A2.Count -ne 0 -and $A2A1.Count -ne 0) {'Array1 and Array2 are not equal or subsets of each other'}
 }
+
+function Test-ArrayEqual {
+  <#
+  .SYNOPSIS
+    This only tests to see if two arrays are equal
+  .DESCRIPTION
+    When running this command the two arrays are tessted for equality, the array values 
+    do not need to be in the same order to be considered equal, but must be the same 
+    length and have the same values 
+  .NOTES
+    Created By: Brent Denny on 04-Jul-2024
+  .EXAMPLE
+    Test-ArrayEqual -ReferenceArray $Array1  -DifferenceArray $Array2
+    This will check these two arrays and if they are the same the output will be 
+    Boolean True, otherwise False 
+  .OUTPUTS
+    Boolean  
+  #>
+  Param (
+    [Parameter(Mandatory=$true)]
+    $ReferenceArray,
+    [Parameter(Mandatory=$true)]
+    $DifferenceArray
+  )
+  try {
+    $Result = (Compare-Object -ReferenceObject $ReferenceArray -DifferenceObject $DifferenceArray -ErrorAction Stop).count -eq 0 
+    return $Result 
+  }
+  catch {
+    Write-Warning 'There was a problem comparing the two arrays'
+    break
+  }  
+}
