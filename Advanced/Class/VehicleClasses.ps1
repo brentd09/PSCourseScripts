@@ -24,20 +24,19 @@ class Vehicle {
     $this.FuelRemaining = 0
   }
 
-  Refuel(){
+  [void]Refuel(){
     $this.FuelRemaining = 60
   }
 
   [void]Drive([int]$Distance) {
     if ($this.FuelRemaining -gt 0) {$this.FuelRemaining =  $this.FuelRemaining - (8 / 100 * $Distance)}
-    if ($this.FuelRemaining -le 0) {$this.FuelRemaining = 0} 
+    if ($this.FuelRemaining -le 0) {$this.FuelRemaining = 0}
   }
-
 }
 
-
-$Donk = [Engine]::new("V4", 100)
-$Car = [Vehicle]::new("Chevy", "Impala", 1967, $Donk)
+$Donk = [Engine]::new("V4", 187)
+$Car = [Vehicle]::new("Mazda", "CX5", 2023, $Donk)
 $Car.Refuel()
 $Car.Drive(100)
-$Car.FuelRemaining  
+#$Car.Engine 
+$Car
