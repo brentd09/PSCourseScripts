@@ -13,20 +13,29 @@ class person {
     $this.CountryOfResidence = ''
   }
 
-  person ([string]$GivenName,[string]$Surname,[datetime]$BirthDate,[string]$CountryOfBirth,[string]$CountryOfResidence) {
-    $this.GivenName = $GivenName
-    $this.Surname = $Surname
-    $this.BirthDate = $BirthDate
-    $this.CountryOfBirth = $CountryOfBirth
-    $this.CountryOfResidence = $CountryOfResidence
-  }
-
   person ([string]$GivenName,[string]$Surname,[datetime]$BirthDate) {
     $this.GivenName = $GivenName
     $this.Surname = $Surname
     $this.BirthDate = $BirthDate
     $this.CountryOfBirth = 'Australia'
     $this.CountryOfResidence = 'Australia'
+  }
+
+  person ([string]$GivenName,[string]$Surname,[datetime]$BirthDate,[string]$CountryOfBirth) {
+    $this.GivenName = $GivenName
+    $this.Surname = $Surname
+    $this.BirthDate = $BirthDate
+    $this.CountryOfBirth = $CountryOfBirth
+    $this.CountryOfResidence = 'Australia'
+  }
+
+
+  person ([string]$GivenName,[string]$Surname,[datetime]$BirthDate,[string]$CountryOfBirth,[string]$CountryOfResidence) {
+    $this.GivenName = $GivenName
+    $this.Surname = $Surname
+    $this.BirthDate = $BirthDate
+    $this.CountryOfBirth = $CountryOfBirth
+    $this.CountryOfResidence = $CountryOfResidence
   }
 
   [int]CalculateAge () {
