@@ -31,7 +31,8 @@ function Get-PipeLineParameter {
   $PipelineParams = $CommandInfo.ParameterSets.Parameters | 
    Where-Object {$_.valuefrompipeline -eq $true -or $_.valuefrompipelineByPropertyName -eq $true }
   $ReturnPipelineDetails = $PipelineParams | 
-   Select-Object -Property Name,ParameterType, @{n='ByValue';e={$_.ValueFromPipeline}}, @{n='ByPropertyName';e={$_.ValueFromPipelineByPropertyName}}
+   Select-Object -Property Name,ParameterType, @{n='ByValue';e={$_.ValueFromPipeline}}, @{n='ByPropertyName';e={$_.ValueFromPipelineByPropertyName}} |
+   Sort-Object -Property ByValue, ByPropertyName
 
   return $ReturnPipelineDetails 
 }
