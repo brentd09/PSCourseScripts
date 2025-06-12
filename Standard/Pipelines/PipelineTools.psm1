@@ -13,13 +13,20 @@ function Get-PipeLineParameter {
     Created By: Brent Denny
     Created On: 11 Jun 2025
   .EXAMPLE
-    Get-PipeLineParameter -Cmdlet Stop-Service
+    Get-PipeLineParameter -Cmdlet Get-Process
     This will show the parameters that will accept pipeline input for the Get-Service command:
 
-    Name        ParameterType                             ByValue ByPropertyName
-    ----        -------------                             ------- --------------
-    InputObject System.ServiceProcess.ServiceController[]    True          False
-    Name        System.String[]                              True           True
+    ParameterSetName        ParameterName ParameterType                ByValue ByPropertyName
+    ----------------        ------------- -------------                ------- --------------
+    Name                    Name          System.String[]                False           True
+    Name                    ComputerName  System.String[]                False           True
+    NameWithUserName        Name          System.String[]                False           True
+    IdWithUserName          Id            System.Int32[]                 False           True
+    Id                      Id            System.Int32[]                 False           True
+    Id                      ComputerName  System.String[]                False           True
+    InputObjectWithUserName InputObject   System.Diagnostics.Process[]    True          False
+    InputObject             InputObject   System.Diagnostics.Process[]    True          False
+    InputObject             ComputerName  System.String[]                False           True
   #>
   [cmdletbinding()]
   Param (
@@ -32,9 +39,11 @@ function Get-PipeLineParameter {
      Where-Object {$_.valuefrompipeline -eq $true -or $_.valuefrompipelineByPropertyName -eq $true } 
     $ReturnPipelineDetails = $PipelineParams | 
      Select-Object -Property @{n='ParameterSetName';e={$ParamSet.Name}},
-                             Name,ParameterType, 
+                             @{n='ParameterName';e={$_.Name}},
+                             ParameterType, 
                              @{n='ByValue';e={$_.ValueFromPipeline}}, 
                              @{n='ByPropertyName';e={$_.ValueFromPipelineByPropertyName}}
     $ReturnPipelineDetails 
   }
 }
+
