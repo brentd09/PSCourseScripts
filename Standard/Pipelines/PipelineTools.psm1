@@ -31,19 +31,31 @@ function Get-PipeLineParameter {
   [cmdletbinding()]
   Param (
     [Parameter(Mandatory=$true)]
-    [string]$Cmdlet
+    [string]$Cmdlet,
+    [switch]$ShowAllParameterSets
   )
   $CommandInfo = Get-Command -Name $Cmdlet
+  $ParameterNamesShown = @()
   foreach ($ParamSet in $CommandInfo.ParameterSets) {
-    $PipelineParams = $ParamSet.Parameters | 
-     Where-Object {$_.valuefrompipeline -eq $true -or $_.valuefrompipelineByPropertyName -eq $true } 
-    $ReturnPipelineDetails = $PipelineParams | 
-     Select-Object -Property @{n='ParameterSetName';e={$ParamSet.Name}},
-                             @{n='ParameterName';e={$_.Name}},
-                             @{n='ByValue';e={$_.ValueFromPipeline}}, 
-                             @{n='ByPropertyName';e={$_.ValueFromPipelineByPropertyName}}, 
-                             ParameterType
-    $ReturnPipelineDetails 
+    foreach ($Parameter in $ParamSet.Parameters) {
+      if ($Parameter.ValueFromPipeline -eq $true -or $Parameter.ValueFromPipelineByPropertyName -eq $true) {
+        $ReturnPipelineDetails = $Parameter | 
+         Select-Object -Property @{n='ParameterSetName';e={$ParamSet.Name}},
+                                 @{n='ParameterName';e={$_.Name}},
+                                 @{n='ByValue';e={$_.ValueFromPipeline}}, 
+                                 @{n='ByPropertyName';e={$_.ValueFromPipelineByPropertyName}}, 
+                                 ParameterType
+        #Write-Debug "After the `$ReturnPipelineDetails is created" 
+        if ($ShowAllParameterSets -eq $true) {$ReturnPipelineDetails}                         
+        elseif ($ReturnPipelineDetails.ParameterName -notin $ParameterNamesShown){
+          #Write-debug "param name $($ReturnPipelineDetails.ParameterName)"
+          $ReturnPipelineDetails | Select-Object ParameterName,ByValue,ByPropertyName,ParameterType
+    
+          $ParameterNamesShown += $ReturnPipelineDetails.ParameterName
+          Write-Debug "After the shown names have been updated"
+        }
+      }
+    } 
   }
 }
 
