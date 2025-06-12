@@ -14,7 +14,7 @@ function Get-PipeLineParameter {
     Created On: 11 Jun 2025
   .EXAMPLE
     Get-PipeLineParameter -Cmdlet Get-Process
-    This will show the parameters that will accept pipeline input for the Get-Service command:
+    This will show the parameters that will accept pipeline input for the Get-Process command:
 
     ParameterSetName        ParameterName ParameterType                ByValue ByPropertyName
     ----------------        ------------- -------------                ------- --------------
