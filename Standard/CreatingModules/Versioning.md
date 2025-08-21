@@ -9,6 +9,15 @@
 5. Create a module manifest file by running the following command
 
 ```PowerShell
-New-ModuleManifest 
+$ManifestSplat = @{
+  Path    = 'C:\Program Files\WindowsPowerShell\Modules\BrentsADTools\1.0.1\BrentsADTools.psd1'
+  RootModule = 'C:\Program Files\WindowsPowerShell\Modules\BrentsADTools\1.0.1\BrentsADTools.psm1'
+  Author     = 'Brent Denny'
+  ModuleVersion = '1.0.1'
+  Description   = 'My AD tools that I have built'
+  FunctionsToExport = 'Invoke-Hello','Invoke-Goodbye'
+}
+
+New-ModuleManifest @ManifestSplat 
 
 ```
