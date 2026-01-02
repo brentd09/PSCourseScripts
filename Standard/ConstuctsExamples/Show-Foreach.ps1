@@ -1,3 +1,5 @@
+Set-PSDebug -Trace 2 -Step
+
 $Numbers = 12,6,3,4,0,16,72
 foreach ($Number in $Numbers) {
   $Result = 144 / $Number
@@ -29,3 +31,5 @@ foreach ($Number in $Numbers) {
   "144 / $Number = $Result"
 }
 Write-host -ForegroundColor Yellow 'End of foreach avoiding errors with break'
+
+Set-PSDebug -Off

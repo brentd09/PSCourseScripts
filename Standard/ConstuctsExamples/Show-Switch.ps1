@@ -14,6 +14,7 @@ do {
   }
 } Until ($Choice -eq 9)
 
+Set-PSDebug -Trace 2 -Step
 
 $EmailAddress = Read-Host -Prompt 'Enter an email address'
 switch -wildcard ($EmailAddress) {
@@ -24,3 +25,5 @@ switch -wildcard ($EmailAddress) {
   '*@adatum.com' {Write-Host -ForegroundColor Yellow 'You work for Adatum'}
   Default {Write-Host -ForegroundColor Yellow 'You have an email I do not recognise'}
 }
+
+Set-PSDebug -Off
